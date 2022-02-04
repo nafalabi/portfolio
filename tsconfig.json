@@ -1,0 +1,10 @@
+{
+  "types": ["node", "@emotion/core"],
+  "compilerOptions": {
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
+    "baseUrl": "./src"
+  },
+  "include": ["src"]
+}

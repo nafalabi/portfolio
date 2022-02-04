@@ -17,9 +17,17 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@fontsource/montserrat": "^4.5.3",
+    "@fontsource/poppins": "^4.5.1",
     "gatsby": "^4.6.0",
     "gatsby-plugin-emotion": "^7.6.0",
+    "polished": "^4.1.4",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-icons": "^4.3.1",
+    "react-responsive-carousel": "^3.2.22"
+  },
+  "devDependencies": {
+    "gatsby-plugin-root-import": "^2.0.8"
   }
 }

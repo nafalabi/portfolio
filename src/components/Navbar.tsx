@@ -15,7 +15,7 @@ const RootNavbar = styled.nav(({ theme }) => ({
   left: 0,
   right: 0,
   backgroundColor: theme.colors.background,
-  transition: "top 0.3s",
+  transition: "all 0.3s",
   zIndex: 1000,
 }));
 
@@ -40,23 +40,10 @@ const NavList = styled.ul<{ expanded: boolean }>(({ theme, expanded }) => ({
 
   "& li": {
     cursor: "pointer",
-    transition: "all 0.5s ease-in",
-    "&:after": {
-      display: "block",
-      content: "' '",
-      borderBottom: "solid 1px",
-      transform: "scaleX(0)",
-      transition: "transform 250ms ease-in-out",
-    },
-    "&:hover": {
-      "&:after": {
-        transform: "scaleX(1)",
-      },
-    },
   },
   "& a": {
     textDecoration: "none",
-    color: theme.colors.text,
+    color: "inherit",
   },
   [`@media (max-width: ${theme.breakpoints.md}px)`]: expanded
     ? {
@@ -98,6 +85,45 @@ const Navbar = ({ title, navigations }: Props) => {
   const prevScrollpos = useRef(0);
 
   useEffect(() => {
+    const updateNavbarBackground = () => {
+      const navbarEl = rootRef.current;
+      const section1 = document.getElementById("top");
+      const section2 = document.getElementById("workExperience");
+      const section3 = document.getElementById("aboutMe");
+      const section4 = document.getElementById("projects");
+
+      if (!navbarEl) return;
+
+      const navbarBound = navbarEl.getBoundingClientRect();
+      const section1Bound = section1.getBoundingClientRect();
+      const section2Bound = section2.getBoundingClientRect();
+      const section3Bound = section3.getBoundingClientRect();
+      const section4Bound = section4.getBoundingClientRect();
+
+      const isInTheAreaOf = (rect: DOMRect) => {
+        return (
+          rect.top <= navbarBound.bottom &&
+          rect.height + rect.top >= navbarBound.bottom
+        );
+      };
+
+      const setBackgroundColorAs = (el: HTMLElement) => {
+        const style = getComputedStyle(el);
+        navbarEl.style.backgroundColor = style.backgroundColor;
+        navbarEl.style.color = style.color;
+      };
+
+      if (isInTheAreaOf(section1Bound)) {
+        setBackgroundColorAs(section1);
+      } else if (isInTheAreaOf(section2Bound)) {
+        setBackgroundColorAs(section2);
+      } else if (isInTheAreaOf(section3Bound)) {
+        setBackgroundColorAs(section3);
+      } else if (isInTheAreaOf(section4Bound)) {
+        setBackgroundColorAs(section4);
+      }
+    };
+
     const hideNavbar = () => {
       const navbarEl = rootRef.current;
 
@@ -114,8 +140,14 @@ const Navbar = ({ title, navigations }: Props) => {
 
       prevScrollpos.current = currentScrollPos;
     };
-    window.addEventListener("scroll", hideNavbar);
-    () => window.removeEventListener("scroll", hideNavbar);
+
+    const scrollListener = () => {
+      updateNavbarBackground();
+      hideNavbar();
+    };
+
+    window.addEventListener("scroll", scrollListener);
+    () => window.removeEventListener("scroll", scrollListener);
   }, []);
 
   return (

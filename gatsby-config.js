@@ -6,6 +6,7 @@ module.exports = {
   plugins: [
     "gatsby-plugin-emotion",
     "gatsby-plugin-root-import",
+    "gatsby-plugin-react-helmet",
     {
       resolve: `gatsby-plugin-typescript`,
       options: {

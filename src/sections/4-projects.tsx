@@ -41,6 +41,13 @@ import TofELearning from "images/screenshots/toffin/elearning.png";
 
 const Root = styled("div")(({ theme }) => ({
   display: "flex",
+  // borderTop: "5px solid",
+  backgroundColor: theme.colors.background,
+  color: theme.colors.text,
+
+  "& .section-title": {
+    textAlign: "center",
+  },
 
   "& .content": {
     marginTop: "3rem",
@@ -123,19 +130,9 @@ const projects: ProjectItemProps[] = [
     title: "Payment App",
     company: "Freelance",
     description:
-      "It's a simple payment application for a company to give its user a way to pay its recurring payment",
+      "It's a simple payment application for a company to give its user a way to pay recurring payment",
     techs: ["React.js", "Laravel", "Inertia.js", "Voyager"],
-    links: [
-      // {
-      //   text: (
-      //     <>
-      //       <FaLink css={{ marginBottom: "-2px" }} />
-      //       &nbsp; Visit
-      //     </>
-      //   ),
-      //   link: "#",
-      // },
-    ],
+    links: [],
   },
   {
     images: [
@@ -167,9 +164,12 @@ const projects: ProjectItemProps[] = [
 
 const Section4Projects = () => {
   return (
-    <Root id="projects">
+    <Root id="projects" className="section">
       <Container>
-        <Typography variant="heading">Things I have developed</Typography>
+        <div className="section-title">
+          <Typography variant="heading">Projects</Typography>
+          <Typography>Things I have developed</Typography>
+        </div>
         <div className="content">
           {projects.map((project) => (
             <ProjectItem key={project.title} {...project} />

@@ -5,16 +5,18 @@ import Button from "../components/Button";
 import Container from "../components/Container";
 import Typography from "../components/Typography";
 
-const Root = styled("div")({
+const Root = styled("div")(({ theme }) => ({
   display: "flex",
   height: "100vh",
   width: "100%",
   minHeight: "400px",
-});
+  backgroundColor: theme.colors.background,
+  color: theme.colors.text,
+}));
 
 const Section1Intro = () => {
   return (
-    <Root id="top">
+    <Root id="top" className="section">
       <Container>
         <Typography variant="heading">Software Engineer</Typography>
         <Typography variant="title">Hi, my name is Nanda Abi Fahmi.</Typography>

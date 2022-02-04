@@ -17,6 +17,9 @@ const Root = styled("div")(
   min-height: 620px;
   position: relative;
 	overflow: hidden;
+  background-color: white;
+  color: ${theme.colors.text};
+  box-shadow: ${theme.shadow[1]};
 
 	.container {
 		display: flex;
@@ -61,7 +64,7 @@ const Root = styled("div")(
 
 const Section3AboutMe = () => {
   return (
-    <Root id="aboutMe">
+    <Root id="aboutMe" className="section">
       <Container className="container">
         <div className="heading">
           <Typography variant="heading">about me</Typography>
@@ -85,18 +88,18 @@ const Section3AboutMe = () => {
           <div className="col">
             <Card title="Technologies">
               <Box css={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                <Chip>React.js</Chip>
-                <Chip>Redux</Chip>
-                <Chip>Typescript</Chip>
-                <Chip>Firebase</Chip>
-                <Chip>CouchDB</Chip>
-                <Chip>MongoDB</Chip>
-                <Chip>Mysql</Chip>
-                <Chip>Node.js</Chip>
-                <Chip>Laravel</Chip>
-                <Chip>Flutter</Chip>
-                <Chip>React Native</Chip>
-                <Chip>Docker</Chip>
+                <Chip color="blue">React.js</Chip>
+                <Chip color="blue">Redux</Chip>
+                <Chip color="blue">Typescript</Chip>
+                <Chip color="blue">Firebase</Chip>
+                <Chip color="blue">CouchDB</Chip>
+                <Chip color="blue">MongoDB</Chip>
+                <Chip color="blue">Mysql</Chip>
+                <Chip color="blue">Node.js</Chip>
+                <Chip color="blue">Laravel</Chip>
+                <Chip color="blue">Flutter</Chip>
+                <Chip color="blue">React Native</Chip>
+                <Chip color="blue">Docker</Chip>
               </Box>
             </Card>
 

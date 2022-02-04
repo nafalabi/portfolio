@@ -13,7 +13,7 @@ const FooterRoot = styled.div(({ theme }) => ({
 
 const Footer = () => {
   return (
-    <FooterRoot>
+    <FooterRoot id="footer" className="section">
       <Container
         css={{ display: "flex", flexGrow: 1, justifyContent: "space-between" }}
       >

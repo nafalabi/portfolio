@@ -56,7 +56,7 @@ const Section2WorkExperience = () => {
   const theme = useTheme();
 
   return (
-    <Root id="workExperience">
+    <Root id="workExperience" className="section">
       <Container css={{ position: "relative" }}>
         <Heading>Working Experience</Heading>
         <Box

@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
 import { Global } from "@emotion/react";
-import Typography from "../components/Typography";
 import ThemeProvider from "../theme";
-import Container from "../components/Container";
 import Navbar from "../components/Navbar";
+import { Helmet } from "react-helmet";
 
 import "@fontsource/montserrat";
 import "@fontsource/poppins";
@@ -14,6 +13,7 @@ import Section2WorkExperience from "../sections/2- work-experience";
 import Section3AboutMe from "sections/3-about-me";
 import Footer from "sections/Footer";
 import Section4Projects from "sections/4-projects";
+import { PageStateProvider } from "context/PageState";
 
 const globalStyles = (
   <Global
@@ -34,28 +34,33 @@ const RootMain = styled("main")`
 
 const IndexPage = () => {
   return (
-    <ThemeProvider>
-      {globalStyles}
-      <RootMain>
-        <Navbar
-          title="Nanda"
-          navigations={[
-            { name: "Work Experience", link: "#workExperience" },
-            { name: "About me", link: "#aboutMe" },
-            { name: "Projects", link: "#projects" },
-          ]}
-        />
+    <PageStateProvider>
+      <ThemeProvider>
+        <Helmet>
+          <title>Nanda Abi Fahmi</title>
+        </Helmet>
+        {globalStyles}
+        <RootMain>
+          <Navbar
+            title="Nanda"
+            navigations={[
+              { name: "Work Experience", link: "#workExperience" },
+              { name: "About me", link: "#aboutMe" },
+              { name: "Projects", link: "#projects" },
+            ]}
+          />
 
-        <FloatingActions />
+          <FloatingActions />
 
-        <Section1Intro />
-        <Section2WorkExperience />
-        <Section3AboutMe />
-        <Section4Projects />
+          <Section1Intro />
+          <Section2WorkExperience />
+          <Section3AboutMe />
+          <Section4Projects />
 
-        <Footer />
-      </RootMain>
-    </ThemeProvider>
+          <Footer />
+        </RootMain>
+      </ThemeProvider>
+    </PageStateProvider>
   );
 };
 

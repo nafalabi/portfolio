@@ -13,7 +13,9 @@
     "build": "gatsby build",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "deploy": "gatsby build && gh-pages -d public -r https://github.com/nafalabi/nafalabi.github.io -b main"
+    "deploy": "gatsby build && yarn optimize && yarn deploy-files",
+    "deploy-files": "gh-pages -d public -r https://github.com/nafalabi/nafalabi.github.io -b main",
+    "optimize": "node ./script/optimize-image.js"
   },
   "dependencies": {
     "@emotion/react": "^11.7.1",

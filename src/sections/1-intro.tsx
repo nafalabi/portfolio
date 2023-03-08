@@ -15,6 +15,17 @@ const Root = styled("div")(({ theme }) => ({
 }));
 
 const Section1Intro = () => {
+
+  const handleGetInTouch = () => {
+    const aboutMeDOM = document.getElementById('aboutMe');
+    aboutMeDOM.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleLearnMore = () => {
+    const experienceDOM = document.getElementById('workExperience');
+    experienceDOM.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <Root id="top" className="section">
       <Container>
@@ -24,11 +35,11 @@ const Section1Intro = () => {
           Experienced Software Engineer with wide range of skills. Proven to
           have handled a production-grade application. Provide fast development
           and maintainable source code.
-          <br />3 years of experience in Web &amp; Mobile development
+          <br />4 years of experience in Web &amp; Mobile development
         </Typography>
         <Box css={{ display: "flex", marginTop: "2rem", gap: "1rem" }}>
-          <Button color="blue">Get In Touch</Button>
-          <Button color="red">Learn more</Button>
+          <Button color="blue" onClick={handleGetInTouch}>Get In Touch</Button>
+          <Button color="red" onClick={handleLearnMore}>Learn more</Button>
         </Box>
       </Container>
     </Root>

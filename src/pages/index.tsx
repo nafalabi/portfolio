@@ -9,7 +9,7 @@ import "@fontsource/poppins";
 
 import FloatingActions from "../sections/FloatingActions";
 import Section1Intro from "../sections/1-intro";
-import Section2WorkExperience from "../sections/2- work-experience";
+import Section2WorkExperience from "../sections/2-work-experience";
 import Section3AboutMe from "sections/3-about-me";
 import Footer from "sections/Footer";
 import Section4Projects from "sections/4-projects";

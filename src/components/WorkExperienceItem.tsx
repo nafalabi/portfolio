@@ -23,15 +23,17 @@ const WorkExperienceItem = ({
       <div
         css={{
           display: "flex",
-          alignItems: "center",
+          alignItems: "start",
           gap: "0.5rem",
+          flexWrap: 'wrap',
         }}
       >
         <Typography variant="body" fontWeight="bold">
           {jobTitle}
         </Typography>
-        &middot;
-        <Typography variant="body2" fontWeight="normal">
+        <Typography variant="body2" fontWeight="normal" css={{ whiteSpace: 'nowrap' }}>
+          &middot;
+          &nbsp;
           {timeRange}
         </Typography>
       </div>

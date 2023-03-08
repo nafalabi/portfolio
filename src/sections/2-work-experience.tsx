@@ -14,9 +14,8 @@ const Root = styled("div")(({ theme }) => ({
   display: "flex",
   backgroundColor: theme.colors.background2,
   color: theme.colors.text2,
-  height: "100vh",
+  minHeight: "100vh",
   width: "100%",
-  minHeight: "670px",
 
   "@media (max-width: 600px)": {
     height: "auto",

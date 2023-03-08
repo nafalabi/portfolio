@@ -4,12 +4,11 @@ import Box from "../components/Box";
 import Container from "../components/Container";
 import Heading from "../components/Heading";
 import Timeline from "../components/Timeline";
+import WorkExperienceItem, { WorkExperience } from "components/WorkExperienceItem";
 
 import mplusLogo from "images/mplus.ico";
 import freelanceLogo from "images/freelance.svg";
-import WorkExperienceItem, {
-  WorkExperience,
-} from "components/WorkExperienceItem";
+import majooLogo from "images/company/majoo.jpeg";
 
 const Root = styled("div")(({ theme }) => ({
   display: "flex",
@@ -27,12 +26,20 @@ const Root = styled("div")(({ theme }) => ({
 
 const workExperiences: WorkExperience[] = [
   {
+    jobTitle: "Frontend Engineer",
+    timeRange: "Mar 2022 - Feb 2023",
+    company: "Majoo Indonesia",
+    companyIcon: majooLogo,
+    description:
+      "Responsibility\n - Maintenance & Bug fix dashboard platform\n - Doing new features on dashboard platform\n\nTech used: React.js, React hooks & Context API, Stitches.js",
+  },
+  {
     jobTitle: "Freelance Software Engineer",
     timeRange: "May 2021 - Feb 2022",
     company: "Freelance",
     companyIcon: freelanceLogo,
     description:
-      "Working on various projects from website to mobile apps\nTech used: Laravel, Codeigniter, React.js, and flutter",
+      "Working on various projects from website to mobile apps\nTech used: Laravel, Codeigniter, React.js, and Flutter",
   },
   {
     jobTitle: "System Administrator",
@@ -48,7 +55,7 @@ const workExperiences: WorkExperience[] = [
     company: "M+ Software",
     companyIcon: mplusLogo,
     description:
-      "Being a core developer to maintain & improve an existing project.\nColaborate with the team to develop web & mobile apps.\nTech used: React.js, Codeigniter, React Native",
+      "Being a core developer to maintain & improve an existing project.\nColaborate with the team to develop web & mobile apps.\n\nTech used: React.js, Codeigniter, React Native, Firebase, CouchDB",
   },
 ];
 

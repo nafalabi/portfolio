@@ -25,20 +25,20 @@ const Root = styled("div")(({ theme }) => ({
 
 const workExperiences: WorkExperience[] = [
   {
+    jobTitle: "Software Engineer",
+    timeRange: "May 2021 - Present",
+    company: "Freelance",
+    companyIcon: freelanceLogo,
+    description:
+      "Working on various projects from website to mobile apps.\nNotable works:\n- Develop super app for coffee company (Toffin) using Flutter\n- Develop recurring payment web app for a private company using Laravel and React.js\nTech used: Laravel, Codeigniter, React.js, Flutter",
+  },
+  {
     jobTitle: "Frontend Engineer",
     timeRange: "Mar 2022 - Feb 2023",
     company: "Majoo Indonesia",
     companyIcon: majooLogo,
     description:
-      "Responsibility\n - Maintenance & Bug fix dashboard platform\n - Doing new features on dashboard platform\n\nTech used: React.js, React hooks & Context API, Stitches.js",
-  },
-  {
-    jobTitle: "Freelance Software Engineer",
-    timeRange: "May 2021 - Feb 2022",
-    company: "Freelance",
-    companyIcon: freelanceLogo,
-    description:
-      "Working on various projects from website to mobile apps\nTech used: Laravel, Codeigniter, React.js, and Flutter",
+      "Responsibility, working with a team on Third Party Marketplace Management\n- Doing new features, maintenance & bug fix dashboard platfor\n- Contributed to the company's effort to redesign the dashboard platform to the new design\n- Improve legacy code to comply with the best practices\nWorking scope: marketplace aggregation & transaction (Tokopedia, Shopee, Bukalapak, Grabfood, Gofood)\nTech used: React.js, React hooks & Context API, Stitches.js",
   },
   {
     jobTitle: "System Administrator",
@@ -46,7 +46,7 @@ const workExperiences: WorkExperience[] = [
     company: "M+ Software",
     companyIcon: mplusLogo,
     description:
-      "Responsibility\n- Setting up an environment for a project's app/website. Usually includes setting up a server instance, setting up standardize server utilities, setting up required services, domain management, etc.\n- Responsible for monitoring server abnormal activities as well as setting up server alerts\n- Maintaining server and fixing breaking changes when an unintentional update occurred",
+      "Responsibility\n- Setting up an environment for a project's app/website. Usually includes setting up a server instance, setting up standardize server utilities, setting up required services, domain management, etc.\n- Responsible for monitoring server abnormal activities as well as setting up server alerts\n- Maintaining server and fixing breaking changes when an unintentional update occurred\nSkills: Linux Server Administration, Shell Scripting, AWS Cloud, Nagios Monitoring Server, Dokuwiki",
   },
   {
     jobTitle: "Software Engineer",
@@ -54,7 +54,7 @@ const workExperiences: WorkExperience[] = [
     company: "M+ Software",
     companyIcon: mplusLogo,
     description:
-      "Being a core developer to maintain & improve an existing project.\nColaborate with the team to develop web & mobile apps.\n\nTech used: React.js, Codeigniter, React Native, Firebase, CouchDB",
+      "Responsibility:\n- Being a core developer to maintain & improve an a project called SARA, a software-as-a-service staff-communication tool for managing service and maintenance requests in hotels. Responsible for doing new features as well as improving the existing functions/processes\n- Collaborate with the team to develop web & mobile apps\nNotable works\n- Successfully implemented a chat feature with media and audio attachment using Firebase and CouchDB\n- Successfully migrated an admin panel from monolithic CodeIgniter pages into React.js, implemented using custom webpack and custom CodeIgniter view\nTech used: React.js, Codeigniter, React Native, Firebase, CouchDB",
   },
 ];
 

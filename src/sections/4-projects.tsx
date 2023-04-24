@@ -39,6 +39,9 @@ import TofMainHome from "images/screenshots/toffin/mainhomepage.png";
 import TofMyAccount from "images/screenshots/toffin/myaccount.png";
 import TofELearning from "images/screenshots/toffin/elearning.png";
 
+import FirChatInitial from "images/screenshots/fir-chatapp/init.png";
+import FirChatPreview from "images/screenshots/fir-chatapp/preview.gif";
+
 const Root = styled("div")(({ theme }) => ({
   display: "flex",
   // borderTop: "5px solid",
@@ -147,7 +150,7 @@ const projects: ProjectItemProps[] = [
     company: "Freelance (primercode)",
     description:
       "Toffin App is a coffee company app\nIt provides E-Commerce, E-Learning, After-sales service, and things around coffee making\nBuilt with flutter, and currently is still in development",
-    techs: ["Flutter"],
+    techs: ["Flutter", "Odoo", "Firebase", "Twilio"],
     links: [
       {
         text: (
@@ -160,6 +163,17 @@ const projects: ProjectItemProps[] = [
       },
     ],
   },
+  {
+    images: [FirChatPreview, FirChatInitial],
+    title: "Firebase Simple Chat",
+    company: "Personal project",
+    description: "Project to showcase implementation of a single-room chat app\nIt was built with firebase, react.js and go (cronjob)",
+    techs: ["Firebase", "React.js", "Go"],
+    links: [
+      { text: <><FaGithub css={{ marginBottom: "-2px" }} />&nbsp; Source</>, link: "https://github.com/nafalabi/firebase-simple-chat" },
+      { text: <><FaLink css={{ marginBottom: "-2px" }} />&nbsp; Demo</>, link: "https://fir-chat-app-nafalabi.web.app/" },
+    ],
+  }
 ];
 
 const Section4Projects = () => {

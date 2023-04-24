@@ -3,7 +3,7 @@ import Chip from "./Chip";
 import Link from "./Link";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { useEffect, useState } from "react";
+import { Component, useEffect, useState } from "react";
 
 const RootProjectItem = styled.div(({ theme }) => ({
   display: "flex",
@@ -65,6 +65,8 @@ const RootProjectItem = styled.div(({ theme }) => ({
     },
 
     "& .links": {
+      display: "flex",
+      gap: "1rem",
       marginTop: "1rem",
     },
   },
@@ -77,7 +79,7 @@ const RootProjectItem = styled.div(({ theme }) => ({
 export interface ProjectItemProps {
   images: any[];
   title: string;
-  company: string;
+  company?: string;
   description: string;
   techs: string[];
   links: { text: string | JSX.Element; link: string }[];
@@ -125,7 +127,9 @@ const ProjectItem = ({
       </div>
       <div className="project-detail">
         <div className="title">{title}</div>
-        <div className="company">{company}</div>
+        {company && (
+          <div className="company">{company}</div>
+        )}
         <div className="description">{description}</div>
         <div className="techs">
           {techs.map((tech) => (

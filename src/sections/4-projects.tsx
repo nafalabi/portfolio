@@ -42,6 +42,12 @@ import TofELearning from "images/screenshots/toffin/elearning.png";
 import FirChatInitial from "images/screenshots/fir-chatapp/init.png";
 import FirChatPreview from "images/screenshots/fir-chatapp/preview.gif";
 
+import IntaraDevice from "images/screenshots/intara/intara-device.png";
+import IntaraLogin from "images/screenshots/intara/intara-login.png";
+import IntaraOverview from "images/screenshots/intara/intara-overview.png";
+import IntaraPasien from "images/screenshots/intara/intara-pasien.png";
+import IntaraUsage from "images/screenshots/intara/intara-usage.png";
+
 const Root = styled("div")(({ theme }) => ({
   display: "flex",
   // borderTop: "5px solid",
@@ -172,6 +178,17 @@ const projects: ProjectItemProps[] = [
     links: [
       { text: <><FaGithub css={{ marginBottom: "-2px" }} />&nbsp; Source</>, link: "https://github.com/nafalabi/firebase-simple-chat" },
       { text: <><FaLink css={{ marginBottom: "-2px" }} />&nbsp; Demo</>, link: "https://fir-chat-app-nafalabi.web.app/" },
+    ],
+  },
+  {
+    images: [IntaraLogin, IntaraOverview, IntaraUsage, IntaraDevice, IntaraPasien],
+    title: "Intara Iot",
+    company: "Freelance",
+    description: "Intara Iot is an Iot project used for medical infusion monitoring.\nAn Iot device will be attached to an infusion system and it will send live data through internet.\nIt was build with arduino, firebase and next.js",
+    techs: ["Firebase", "Arduino", "Next.js"],
+    links: [
+      { text: <><FaGithub css={{ marginBottom: "-2px" }} />&nbsp; Source</>, link: "https://github.com/nafalabi/intara-iot-firebase" },
+      { text: <><FaLink css={{ marginBottom: "-2px" }} />&nbsp; Demo</>, link: "https://intara-iot.vercel.app" },
     ],
   }
 ];

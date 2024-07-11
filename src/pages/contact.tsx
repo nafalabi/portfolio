@@ -28,6 +28,10 @@ const Root = emotionStyled("div")(({ theme }) => ({
     marginTop: "3rem",
     fontSize: theme.typography.body,
 
+    "& ul": {
+      paddingInlineStart: "1rem",
+    },
+
     "& li": {
       marginBottom: "1rem",
 
@@ -38,6 +42,7 @@ const Root = emotionStyled("div")(({ theme }) => ({
 
     "& a": {
       color: theme.colors.button.blue,
+      overflowWrap: "break-word",
     },
   },
 

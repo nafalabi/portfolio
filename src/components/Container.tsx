@@ -1,9 +1,10 @@
+import { ReactNode } from "react";
 import { CommonComponentProps } from "./types";
 
 export interface ContainerProps
   extends CommonComponentProps,
-    React.HTMLAttributes<HTMLDivElement> {
-  children: any;
+  React.HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
 }
 
 const Container = ({ css: customStyles, ...props }: ContainerProps) => {
@@ -11,18 +12,10 @@ const Container = ({ css: customStyles, ...props }: ContainerProps) => {
     <div
       css={[
         (theme) => `
-				width: 1100px;
-				max-width: 1100px;
+        box-sizing: border-box;
+				max-width: ${theme.breakpoints.md}px;
         margin: auto;
         padding: 2rem;
-
-				@media (max-width: ${theme.breakpoints.xl}px) {
-					width: 1000px;
-				  max-width: 1000px;
-				}
-				@media (max-width: ${theme.breakpoints.lg}px) {
-					width: auto;
-				}
         @media (max-width: ${theme.breakpoints.sm}px) {
           padding: 1rem;
         }

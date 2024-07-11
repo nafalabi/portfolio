@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { CustomTheme } from "theme";
+import { CustomTheme } from "@/theme";
 import { CommonComponentProps } from "./types";
 
 interface ChipProps extends CommonComponentProps {

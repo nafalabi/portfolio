@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import Container from "components/Container";
-import Link from "components/Link";
+import Container from "@/components/Container";
+import Link from "@/components/Link";
 import { transparentize } from "polished";
 
 const FooterRoot = styled.div(({ theme }) => ({
@@ -17,7 +17,7 @@ const Footer = () => {
       <Container
         css={{ display: "flex", flexGrow: 1, justifyContent: "space-between" }}
       >
-        <div>Built with Gastbyjs &nbsp;&middot;&nbsp; Nanda Abi Fahmi</div>
+        <div>Nanda Abi Fahmi &nbsp;&middot;&nbsp; 2024</div>
         <div css={{ display: "flex", gap: "0.5rem" }}>
           <Link href="https://github.com/nafalabi">Github</Link>
           <Link href="https://www.linkedin.com/in/nanda-abi-fahmi/">

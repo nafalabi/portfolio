@@ -1,40 +1,37 @@
 {
   "name": "portfolio",
-  "version": "1.0.0",
   "private": true,
-  "description": "portfolio",
-  "author": "Nanda Abi Fahmi",
-  "keywords": [
-    "gatsby"
-  ],
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "develop": "gatsby develop",
-    "start": "gatsby develop",
-    "build": "gatsby build",
-    "serve": "gatsby serve",
-    "clean": "gatsby clean",
-    "deploy": "gatsby build && yarn optimize && yarn deploy-files",
-    "deploy-files": "gh-pages -d public -r https://github.com/nafalabi/nafalabi.github.io -b main",
-    "optimize": "node ./script/optimize-image.js"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.7.1",
-    "@emotion/styled": "^11.6.0",
-    "@fontsource/montserrat": "^4.5.3",
-    "@fontsource/poppins": "^4.5.1",
-    "gatsby": "^4.6.0",
-    "gatsby-plugin-emotion": "^7.6.0",
-    "gatsby-plugin-react-helmet": "^5.6.0",
-    "polished": "^4.1.4",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-helmet": "^6.1.0",
-    "react-icons": "^4.3.1",
-    "react-responsive-carousel": "^3.2.22"
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@fontsource/montserrat": "^5.0.18",
+    "@types/node": "^20.14.10",
+    "polished": "^4.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.2.1",
+    "react-responsive-carousel": "^3.2.23",
+    "react-router-dom": "^6.24.1"
   },
   "devDependencies": {
-    "@types/react-helmet": "^6.1.5",
-    "gatsby-plugin-root-import": "^2.0.8",
-    "gh-pages": "^3.2.3"
+    "@swc/plugin-emotion": "^3.0.9",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.1",
+    "@typescript-eslint/parser": "^7.13.1",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1"
   }
 }

@@ -1,8 +1,8 @@
 body {
   margin: 0;
-  background-color: "#e1dfde";
-  color: "#010102";
-  fontfamily: "montserrat";
-  fontsize: 18;
-  boxsizing: "border-box";
+  background-color: #e1dfde;
+  color: #010102;
+  font-family: montserrat;
+  font-size: 18;
+  box-sizing: border-box;
 }

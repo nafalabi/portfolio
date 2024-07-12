@@ -20,7 +20,7 @@ const Root = emotionStyled("div")(({ theme }) => ({
 
   "& .content": {
     marginTop: "2.5rem",
-    fontWeight: 600,
+    fontWeight: 500,
     fontSize: theme.typography.body,
   },
 

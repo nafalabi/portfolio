@@ -1,4 +1,21 @@
-import "@fontsource/montserrat";
+import "@fontsource/montserrat/latin-100.css";
+import "@fontsource/montserrat/latin-200.css";
+import "@fontsource/montserrat/latin-300.css";
+import "@fontsource/montserrat/latin-400.css";
+import "@fontsource/montserrat/latin-500.css";
+import "@fontsource/montserrat/latin-600.css";
+import "@fontsource/montserrat/latin-700.css";
+import "@fontsource/montserrat/latin-800.css";
+import "@fontsource/montserrat/latin-900.css";
+import "@fontsource/montserrat/latin-100-italic.css";
+import "@fontsource/montserrat/latin-200-italic.css";
+import "@fontsource/montserrat/latin-300-italic.css";
+import "@fontsource/montserrat/latin-400-italic.css";
+import "@fontsource/montserrat/latin-500-italic.css";
+import "@fontsource/montserrat/latin-600-italic.css";
+import "@fontsource/montserrat/latin-700-italic.css";
+import "@fontsource/montserrat/latin-800-italic.css";
+import "@fontsource/montserrat/latin-900-italic.css";
 import "./global.css";
 
 import { Global } from "@emotion/react";

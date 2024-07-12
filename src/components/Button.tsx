@@ -7,7 +7,7 @@ export interface ButtonProps {
   color?: ButtonColors;
 }
 
-const StyledButton = styled.button<ButtonProps>(({ theme, color }) => {
+const Button = styled.button<ButtonProps>(({ theme, color }) => {
   let backgroundColor = theme.colors.button.blue;
   let textColor = theme.colors.buttonText.white;
 
@@ -33,15 +33,14 @@ const StyledButton = styled.button<ButtonProps>(({ theme, color }) => {
     borderRadius: "1rem",
     cursor: "pointer",
     boxShadow: theme.shadow[2],
-    fontSize: "17px",
+    fontSize: "15px",
     transition: "all 0.2s ease-in",
 
     "&:hover": {
       backgroundColor: darken(0.05)(backgroundColor),
       boxShadow: theme.shadow[3],
-      borderRadius: "0.5rem",
     },
   };
 });
 
-export default StyledButton;
+export default Button;

@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 import Typography, { TypographyProps } from "./Typography";
 
-const Root = styled("div")(({ theme }) => ({
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-empty-pattern
+const Root = styled("div")(({ }) => ({
   display: "flex",
   alignItems: "center",
   flexWrap: "nowrap",

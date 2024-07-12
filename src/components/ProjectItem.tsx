@@ -3,7 +3,7 @@ import Chip from "./Chip";
 import Link from "./Link";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Component, useEffect, useState } from "react";
+import { FocusEvent, useState } from "react";
 
 const RootProjectItem = styled.div(({ theme }) => ({
   display: "flex",
@@ -16,7 +16,7 @@ const RootProjectItem = styled.div(({ theme }) => ({
   "& .project-image": {
     position: "relative",
     flexGrow: 1,
-    minWidth: "300px",
+    minWidth: "250px",
     width: "100%",
 
     "& .carousel-container": {
@@ -77,7 +77,7 @@ const RootProjectItem = styled.div(({ theme }) => ({
 }));
 
 export interface ProjectItemProps {
-  images: any[];
+  images: string[];
   title: string;
   company?: string;
   description: string;
@@ -100,7 +100,12 @@ const ProjectItem = ({
     setEnlargeCarousel(true);
   };
 
-  const handleBlur = () => {
+  const handleBlur = (e: FocusEvent<HTMLDivElement, Element>) => {
+    const el = e.relatedTarget;
+    const ignore = ["control-arrow", "dot"];
+    if (ignore.some((cls) => el?.classList?.contains(cls))) {
+      return;
+    }
     setEnlargeCarousel(false);
   };
 
@@ -127,9 +132,7 @@ const ProjectItem = ({
       </div>
       <div className="project-detail">
         <div className="title">{title}</div>
-        {company && (
-          <div className="company">{company}</div>
-        )}
+        {company && <div className="company">{company}</div>}
         <div className="description">{description}</div>
         <div className="techs">
           {techs.map((tech) => (

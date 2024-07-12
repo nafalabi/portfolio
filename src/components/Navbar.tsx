@@ -1,11 +1,8 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Container from "./Container";
-import { CommonComponentProps } from "./types";
-import Typography from "./Typography";
 import { MdMenu } from "react-icons/md";
-import { useEffect } from "react";
-import { useRef } from "react";
+import { Link } from "react-router-dom";
 
 //====================================================
 
@@ -47,23 +44,23 @@ const NavList = styled.ul<{ expanded: boolean }>(({ theme, expanded }) => ({
   },
   [`@media (max-width: ${theme.breakpoints.md}px)`]: expanded
     ? {
-        display: "flex",
-        flexDirection: "column",
-        position: "absolute",
-        left: 0,
-        right: 0,
-        top: 75,
-        gap: 0,
-        padding: "1rem 2rem",
-        backgroundColor: theme.colors.background,
-        "& li": {
-          padding: "0.5rem",
-          "&:after": {
-            marginTop: "0.5rem",
-            color: "#999",
-          },
+      display: "flex",
+      flexDirection: "column",
+      position: "absolute",
+      left: 0,
+      right: 0,
+      top: 75,
+      gap: 0,
+      padding: "1rem 2rem",
+      backgroundColor: theme.colors.background,
+      "& li": {
+        padding: "0.5rem",
+        "&:after": {
+          marginTop: "0.5rem",
+          color: "#999",
         },
-      }
+      },
+    }
     : { display: "none" },
 }));
 
@@ -74,81 +71,15 @@ interface NavigationItem {
   link: string;
 }
 
-interface Props extends Omit<CommonComponentProps, "children"> {
-  title: string;
-  navigations: NavigationItem[];
-}
+const items: NavigationItem[] = [
+  { name: "About me", link: "/about-me" },
+  { name: "Projects", link: "/projects" },
+  { name: "Contact", link: "/contact" },
+];
 
-const Navbar = ({ title, navigations }: Props) => {
+const Navbar = () => {
   const [expanded, setExpanded] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
-  const prevScrollpos = useRef(0);
-
-  useEffect(() => {
-    const updateNavbarBackground = () => {
-      const navbarEl = rootRef.current;
-      const section1 = document.getElementById("top");
-      const section2 = document.getElementById("workExperience");
-      const section3 = document.getElementById("aboutMe");
-      const section4 = document.getElementById("projects");
-
-      if (!navbarEl) return;
-
-      const navbarBound = navbarEl.getBoundingClientRect();
-      const section1Bound = section1.getBoundingClientRect();
-      const section2Bound = section2.getBoundingClientRect();
-      const section3Bound = section3.getBoundingClientRect();
-      const section4Bound = section4.getBoundingClientRect();
-
-      const isInTheAreaOf = (rect: DOMRect) => {
-        return (
-          rect.top <= navbarBound.bottom &&
-          rect.height + rect.top >= navbarBound.bottom
-        );
-      };
-
-      const setBackgroundColorAs = (el: HTMLElement) => {
-        const style = getComputedStyle(el);
-        navbarEl.style.backgroundColor = style.backgroundColor;
-        navbarEl.style.color = style.color;
-      };
-
-      if (isInTheAreaOf(section1Bound)) {
-        setBackgroundColorAs(section1);
-      } else if (isInTheAreaOf(section2Bound)) {
-        setBackgroundColorAs(section2);
-      } else if (isInTheAreaOf(section3Bound)) {
-        setBackgroundColorAs(section3);
-      } else if (isInTheAreaOf(section4Bound)) {
-        setBackgroundColorAs(section4);
-      }
-    };
-
-    const hideNavbar = () => {
-      const navbarEl = rootRef.current;
-
-      if (!navbarEl) return;
-
-      const clientBound = navbarEl.getBoundingClientRect();
-      const currentScrollPos = window.pageYOffset;
-
-      if (prevScrollpos.current > currentScrollPos) {
-        navbarEl.style.top = "0";
-      } else {
-        navbarEl.style.top = `-${clientBound.height}px`;
-      }
-
-      prevScrollpos.current = currentScrollPos;
-    };
-
-    const scrollListener = () => {
-      updateNavbarBackground();
-      hideNavbar();
-    };
-
-    window.addEventListener("scroll", scrollListener);
-    () => window.removeEventListener("scroll", scrollListener);
-  }, []);
 
   return (
     <RootNavbar ref={rootRef}>
@@ -161,9 +92,17 @@ const Navbar = ({ title, navigations }: Props) => {
           padding: "1.5rem 2rem",
         }}
       >
-        <Typography variant="title" css={{ fontWeight: "bold" }}>
-          {title}
-        </Typography>
+        <span css={{ fontWeight: 600 }}>
+          <Link
+            css={{
+              color: "inherit",
+              textDecoration: "none",
+            }}
+            to="/"
+          >
+            Nanda
+          </Link>
+        </span>
         <ButtonExpandNav
           onClick={(e) => {
             e.preventDefault();
@@ -173,18 +112,17 @@ const Navbar = ({ title, navigations }: Props) => {
           <MdMenu size={40} />
         </ButtonExpandNav>
         <NavList expanded={expanded}>
-          {navigations.map(({ name, link }) => {
+          {items.map(({ name, link }) => {
             return (
               <li key={name}>
-                <a
-                  onClick={() =>
-                    document
-                      .querySelector(link)
-                      .scrollIntoView({ behavior: "smooth" })
-                  }
+                <Link
+                  to={link}
+                  css={{
+                    fontWeight: 600,
+                  }}
                 >
                   {name}
-                </a>
+                </Link>
               </li>
             );
           })}

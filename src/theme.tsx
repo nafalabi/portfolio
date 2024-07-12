@@ -1,4 +1,5 @@
 import { ThemeProvider as EmotionThemeProvider } from "@emotion/react";
+import { ReactNode } from "react";
 
 export const theme = {
   colors: {
@@ -49,7 +50,7 @@ declare module "@emotion/react" {
 }
 
 interface Props {
-  children: any;
+  children: ReactNode;
 }
 
 const ThemeProvider = (props: Props) => {

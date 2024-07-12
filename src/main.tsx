@@ -4,7 +4,7 @@ import "./global.css";
 import { Global } from "@emotion/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import ThemeProvider from "./theme";
 import Home from "./pages/home.tsx";
 import AboutMePage from "./pages/about-me.tsx";
@@ -27,7 +27,7 @@ const globalStyles = (
   />
 );
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <Home />,

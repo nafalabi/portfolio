@@ -49,6 +49,19 @@ import IntaraOverview from "@/images/screenshots/intara/intara-overview.png";
 import IntaraPasien from "@/images/screenshots/intara/intara-pasien.png";
 import IntaraUsage from "@/images/screenshots/intara/intara-usage.png";
 
+import OPLogin from "@/images/screenshots/open-pos/login-page.webp";
+import OPCanceled from "@/images/screenshots/open-pos/pos-canceled.webp";
+import OPComplete from "@/images/screenshots/open-pos/pos-complete.webp";
+import OPCreateProduct from "@/images/screenshots/open-pos/pos-create-product.webp";
+import OPHomeCart from "@/images/screenshots/open-pos/pos-home-cart.webp";
+import OPListOrders from "@/images/screenshots/open-pos/pos-list-orders.webp";
+import OPListProduct from "@/images/screenshots/open-pos/pos-list-product.webp";
+import OPMobileViewDetail from "@/images/screenshots/open-pos/pos-mobile-view-detail.webp";
+import OPMobileView from "@/images/screenshots/open-pos/pos-mobile-view.webp";
+import OPPaid from "@/images/screenshots/open-pos/pos-paid.webp";
+import OPPendingCash from "@/images/screenshots/open-pos/pos-pending-cash.webp";
+import OPPendingQris from "@/images/screenshots/open-pos/pos-pending-qris.webp";
+
 const projects: ProjectItemProps[] = [
   {
     title: "Convenient Homepage",
@@ -108,24 +121,6 @@ const projects: ProjectItemProps[] = [
   },
   {
     images: [
-      PayLanding,
-      PayAdminLogin,
-      PayAdminPage,
-      PayStep1,
-      PayStep2,
-      PayStep3,
-      PayStep4,
-      PayStep5,
-    ],
-    title: "Payment App",
-    company: "Freelance",
-    description:
-      "It's a simple payment application for a company to give its user a way to pay recurring payment",
-    techs: ["React.js", "Laravel", "Inertia.js", "Voyager"],
-    links: [],
-  },
-  {
-    images: [
       TofIntro,
       TofRegister,
       TofForgotPass,
@@ -151,12 +146,25 @@ const projects: ProjectItemProps[] = [
     ],
   },
   {
-    images: [FirChatPreview, FirChatInitial],
-    title: "Firebase Simple Chat",
+    images: [
+      OPPendingQris,
+      OPPendingCash,
+      OPCanceled,
+      OPComplete,
+      OPCreateProduct,
+      OPHomeCart,
+      OPListOrders,
+      OPListProduct,
+      OPMobileViewDetail,
+      OPMobileView,
+      OPPaid,
+      OPLogin,
+    ],
+    title: "Open POS",
     company: "Personal project",
     description:
-      "Project to showcase implementation of a single-room chat app\nIt was built with firebase, react.js and go (cronjob)",
-    techs: ["Firebase", "React.js", "Go"],
+      "Open POS is an open sourced version of my thesis app at Nusamandiri. It was built with Go & React.js with Midtrans as the payment gateway. it features Cash POS, Dynamic QRIS POS, live notifier webhook through websocket.",
+    techs: ["Go", "Echo", "React.js", "Midtrans gateway", "Sqlite"],
     links: [
       {
         text: (
@@ -165,18 +173,27 @@ const projects: ProjectItemProps[] = [
             &nbsp; Source
           </>
         ),
-        link: "https://github.com/nafalabi/firebase-simple-chat",
-      },
-      {
-        text: (
-          <>
-            <FaLink css={{ marginBottom: "-2px" }} />
-            &nbsp; Demo
-          </>
-        ),
-        link: "https://fir-chat-app-nafalabi.web.app/",
+        link: "https://github.com/nafalabi/open-pos",
       },
     ],
+  },
+  {
+    images: [
+      PayLanding,
+      PayAdminLogin,
+      PayAdminPage,
+      PayStep1,
+      PayStep2,
+      PayStep3,
+      PayStep4,
+      PayStep5,
+    ],
+    title: "Payment App",
+    company: "Freelance",
+    description:
+      "It's a simple payment application for a company to give its user a way to pay recurring payment",
+    techs: ["React.js", "Laravel", "Inertia.js", "Voyager"],
+    links: [],
   },
   {
     images: [
@@ -209,6 +226,34 @@ const projects: ProjectItemProps[] = [
           </>
         ),
         link: "https://intara-iot.vercel.app",
+      },
+    ],
+  },
+  {
+    images: [FirChatPreview, FirChatInitial],
+    title: "Firebase Simple Chat",
+    company: "Personal project",
+    description:
+      "Project to showcase implementation of a single-room chat app\nIt was built with firebase, react.js and go (cronjob)",
+    techs: ["Firebase", "React.js", "Go"],
+    links: [
+      {
+        text: (
+          <>
+            <FaGithub css={{ marginBottom: "-2px" }} />
+            &nbsp; Source
+          </>
+        ),
+        link: "https://github.com/nafalabi/firebase-simple-chat",
+      },
+      {
+        text: (
+          <>
+            <FaLink css={{ marginBottom: "-2px" }} />
+            &nbsp; Demo
+          </>
+        ),
+        link: "https://fir-chat-app-nafalabi.web.app/",
       },
     ],
   },

@@ -31,17 +31,17 @@ const Home = () => {
         <Typography variant="heading">Software Engineer</Typography>
         <Typography variant="title">Hi, my name is Nanda Abi Fahmi.</Typography>
         <Typography variant="body" css={{ marginTop: "1rem" }}>
-          Experienced Software Engineer with wide range of skills. Proven to
-          have handled a production-grade application. Provide fast development
-          and maintainable source code.
-          <br />4 years of experience in Web &amp; Mobile development
+          I am a well rounded Software Engineer, proficient in Web & Mobile
+          Development and good knowledge in server management. I have proven to
+          have handled enterprise grade application with more than 5 years of
+          experience.
         </Typography>
         <Box css={{ display: "flex", marginTop: "2rem", gap: "1rem" }}>
-          <Button color="blue" onClick={() => navigate("/contact")}>
-            Get In Touch
+          <Button color="blue" onClick={() => navigate("/about-me")}>
+            About me
           </Button>
-          <Button color="red" onClick={() => navigate("/about-me")}>
-            Learn more
+          <Button color="red" onClick={() => navigate("/contact")}>
+            Contact
           </Button>
         </Box>
       </Container>

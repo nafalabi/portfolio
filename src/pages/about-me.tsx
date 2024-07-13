@@ -15,7 +15,7 @@ const Root = emotionStyled("div")(({ theme }) => ({
   minHeight: "calc(100vh - 80px)",
 
   "& .section-title": {
-    fontWeight: "bold",
+    fontWeight: 500,
   },
 
   "& .content": {
@@ -49,7 +49,7 @@ const AboutMePage = () => {
           <p>Hi my name is Nanda Abi Fahmi.</p>
           <p>
             I'm a software engineer with over 5 years of experience in Web (both
-            Backend and Frontend) and mobile development.
+            Backend and Frontend) and Mobile development.
           </p>
           <p>
             Developing software is like a hobby to me, because oftentimes I try

@@ -20,7 +20,7 @@ const Root = emotionStyled("div")(({ theme }) => ({
   minHeight: "calc(100vh - 80px)",
 
   "& .section-title": {
-    fontWeight: "bold",
+    fontWeight: 500,
     marginBottom: "2.5rem",
   },
 

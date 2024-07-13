@@ -39,9 +39,7 @@ const Error404 = () => {
       >
         <div className="section-title">
           <Typography variant="jumbo">404</Typography>
-          <Typography css={{ fontSize: "medium" }}>
-            Page can't be found
-          </Typography>
+          <Typography>Page can't be found</Typography>
         </div>
       </div>
       <Footer />

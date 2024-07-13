@@ -50,7 +50,11 @@ const RootProjectItem = styled.div(({ theme }) => ({
 
     "& .title": {
       fontSize: "25px",
-      fontWeight: "bold",
+      fontWeight: 600,
+    },
+
+    "& .company": {
+      fontWeight: 500,
     },
 
     "& .description": {

@@ -32,9 +32,9 @@ const Home = () => {
         <Typography variant="title">Hi, my name is Nanda Abi Fahmi.</Typography>
         <Typography variant="body" css={{ marginTop: "1rem" }}>
           I am a well rounded Software Engineer, proficient in Web & Mobile
-          Development and good knowledge in server management. I have proven to
-          have handled enterprise grade application with more than 5 years of
-          experience.
+          Development, I have a good knowledge in server management. I have
+          proven to have handled enterprise grade application with more than 5
+          years of experience.
         </Typography>
         <Box css={{ display: "flex", marginTop: "2rem", gap: "1rem" }}>
           <Button color="blue" onClick={() => navigate("/about-me")}>

@@ -1,5 +1,5 @@
+import { lazy, Suspense } from "react";
 import Container from "@/components/Container";
-import ProjectItem, { ProjectItemProps } from "@/components/ProjectItem";
 import Typography from "@/components/Typography";
 import emotionStyled from "@emotion/styled";
 import { FaGithub, FaLink } from "react-icons/fa";
@@ -62,7 +62,7 @@ import OPPaid from "@/images/screenshots/open-pos/pos-paid.webp";
 import OPPendingCash from "@/images/screenshots/open-pos/pos-pending-cash.webp";
 import OPPendingQris from "@/images/screenshots/open-pos/pos-pending-qris.webp";
 
-const projects: ProjectItemProps[] = [
+const projects = [
   {
     title: "Convenient Homepage",
     images: [
@@ -260,9 +260,13 @@ const projects: ProjectItemProps[] = [
 ];
 
 const Root = emotionStyled("div")(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
   backgroundColor: theme.colors.background,
   color: theme.colors.text,
   marginTop: "80px",
+  minHeight: "calc(100vh - 80px)",
 
   "& .section-title": {
     fontWeight: 500,
@@ -272,13 +276,24 @@ const Root = emotionStyled("div")(({ theme }) => ({
   "& .content": {
     marginTop: "3rem",
   },
+
+  "& #footer": {
+    width: "100%",
+  },
 }));
+
+const ProjectItem = lazy(() => import("@/components/ProjectItem"));
 
 const ProjectsPage = () => {
   return (
     <Root id="projects" className="section">
       <Navbar />
-      <Container>
+      <Container
+        css={{
+          margin: "0 0 auto",
+          width: "100%",
+        }}
+      >
         <div className="section-title">
           <Typography variant="heading">Projects</Typography>
           <Typography css={{ fontSize: "medium" }}>
@@ -286,9 +301,11 @@ const ProjectsPage = () => {
           </Typography>
         </div>
         <div className="content">
-          {projects.map((project) => (
-            <ProjectItem key={project.title} {...project} />
-          ))}
+          <Suspense fallback="Loading...">
+            {projects.map((project) => (
+              <ProjectItem key={project.title} {...project} />
+            ))}
+          </Suspense>
         </div>
       </Container>
       <Footer />

@@ -18,8 +18,9 @@ const Footer = () => {
         css={{ display: "flex", flexGrow: 1, justifyContent: "space-between" }}
       >
         <div>Nanda Abi Fahmi &nbsp;&middot;&nbsp; 2024</div>
-        <div css={{ display: "flex", gap: "0.5rem" }}>
+        <div css={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", justifyContent: "flex-end" }}>
           <Link href="https://github.com/nafalabi">Github</Link>
+          <Link href="https://medium.com/@nandaabifahmi">Medium</Link>
           <Link href="https://www.linkedin.com/in/nanda-abi-fahmi/">
             LinkedIn
           </Link>

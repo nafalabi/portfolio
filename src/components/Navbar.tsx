@@ -73,6 +73,7 @@ interface NavigationItem {
 
 const items: NavigationItem[] = [
   { name: "About me", link: "/about-me" },
+  { name: "Blog", link: "https://medium.com/@nandaabifahmi" },
   { name: "Projects", link: "/projects" },
   { name: "Contact", link: "/contact" },
 ];

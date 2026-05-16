@@ -27,6 +27,7 @@ import Home from "./pages/home.tsx";
 import AboutMePage from "./pages/about-me.tsx";
 import ProjectsPage from "./pages/projects.tsx";
 import ContactPage from "./pages/contact.tsx";
+import ExperiencePage from "./pages/experience.tsx";
 import Error404 from "./pages/404.tsx";
 
 const globalStyles = (
@@ -57,6 +58,10 @@ const router = createHashRouter([
   {
     path: "/projects",
     element: <ProjectsPage />,
+  },
+  {
+    path: "/experience",
+    element: <ExperiencePage />,
   },
   {
     path: "/contact",

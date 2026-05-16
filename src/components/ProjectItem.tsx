@@ -115,25 +115,27 @@ const ProjectItem = ({
 
   return (
     <RootProjectItem>
-      <div
-        className={"project-image" + (isCarouselEnlarged ? " enlarged" : "")}
-        onClick={handleClickCarousel}
-        onBlurCapture={handleBlur}
-        tabIndex={-1}
-      >
-        <div className="carousel-container" title="Click to enlarge">
-          <Carousel
-            showArrows={true}
-            swipeable={true}
-            emulateTouch={true}
-            showThumbs={false}
-          >
-            {images.map((img, index) => (
-              <img src={img} key={index} />
-            ))}
-          </Carousel>
+      {images.length > 0 && (
+        <div
+          className={"project-image" + (isCarouselEnlarged ? " enlarged" : "")}
+          onClick={handleClickCarousel}
+          onBlurCapture={handleBlur}
+          tabIndex={-1}
+        >
+          <div className="carousel-container" title="Click to enlarge">
+            <Carousel
+              showArrows={true}
+              swipeable={true}
+              emulateTouch={true}
+              showThumbs={false}
+            >
+              {images.map((img, index) => (
+                <img src={img} key={index} />
+              ))}
+            </Carousel>
+          </div>
         </div>
-      </div>
+      )}
       <div className="project-detail">
         <div className="title">{title}</div>
         {company && <div className="company">{company}</div>}

@@ -100,6 +100,10 @@ const ContactPage = () => {
               <a href="tel:+6285173174375">+62 851-7317-4375</a>
             </li>
           </ul>
+          
+          <p style={{ marginTop: "2rem", fontSize: "16px" }}>
+            If you're working on interesting challenges or want to talk about anything, feel free to reach out!
+          </p>
         </div>
       </Container>
       <Footer />

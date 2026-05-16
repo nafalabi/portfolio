@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Container from "./Container";
-import { MdMenu } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { MdMenu, MdPersonOutline, MdOutlineArticle, MdPhone } from "react-icons/md";
+import { Link, useLocation } from "react-router-dom";
 
 //====================================================
 
@@ -33,7 +33,7 @@ const NavList = styled.ul<{ expanded: boolean }>(({ theme, expanded }) => ({
   listStyle: "none",
   display: "flex",
   flexDirection: "row",
-  gap: "3rem",
+  gap: "2.5rem",
 
   "& li": {
     cursor: "pointer",
@@ -41,6 +41,9 @@ const NavList = styled.ul<{ expanded: boolean }>(({ theme, expanded }) => ({
   "& a": {
     textDecoration: "none",
     color: "inherit",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
   },
   [`@media (max-width: ${theme.breakpoints.md}px)`]: expanded
     ? {
@@ -69,18 +72,23 @@ const NavList = styled.ul<{ expanded: boolean }>(({ theme, expanded }) => ({
 interface NavigationItem {
   name: string;
   link: string;
+  icon: React.ReactNode;
 }
 
 const items: NavigationItem[] = [
-  { name: "About me", link: "/about-me" },
-  { name: "Blog", link: "https://medium.com/@nandaabifahmi" },
-  { name: "Projects", link: "/projects" },
-  { name: "Contact", link: "/contact" },
+  { name: "About me", link: "/about-me", icon: <MdPersonOutline size={20} /> },
+  { name: "Blog", link: "https://medium.com/@nandaabifahmi", icon: <MdOutlineArticle size={20} /> },
+  { name: "Contact", link: "/contact", icon: <MdPhone size={20} /> },
 ];
 
 const Navbar = () => {
   const [expanded, setExpanded] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   return (
     <RootNavbar ref={rootRef}>
@@ -113,7 +121,7 @@ const Navbar = () => {
           <MdMenu size={40} />
         </ButtonExpandNav>
         <NavList expanded={expanded}>
-          {items.map(({ name, link }) => {
+          {items.map(({ name, link, icon }) => {
             return (
               <li key={name}>
                 <Link
@@ -122,7 +130,7 @@ const Navbar = () => {
                     fontWeight: 600,
                   }}
                 >
-                  {name}
+                  {icon} {name}
                 </Link>
               </li>
             );

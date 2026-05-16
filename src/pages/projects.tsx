@@ -2,7 +2,8 @@ import { lazy, Suspense } from "react";
 import Container from "@/components/Container";
 import Typography from "@/components/Typography";
 import emotionStyled from "@emotion/styled";
-import { FaGithub, FaLink } from "react-icons/fa";
+import { FaGithub, FaLink, FaChevronLeft } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -271,6 +272,29 @@ const Root = emotionStyled("div")(({ theme }) => ({
   "& .section-title": {
     fontWeight: 500,
     marginBottom: "2.5rem",
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+  },
+
+  "& .title-row": {
+    display: "flex",
+    alignItems: "center",
+    gap: "1rem",
+    "& a": {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      color: "inherit",
+      textDecoration: "none",
+      padding: "8px",
+      borderRadius: "50%",
+      transition: "background-color 0.2s",
+      marginLeft: "-12px",
+      "&:hover": {
+        backgroundColor: "rgba(0, 0, 0, 0.05)",
+      }
+    }
   },
 
   "& .content": {
@@ -295,8 +319,13 @@ const ProjectsPage = () => {
         }}
       >
         <div className="section-title">
-          <Typography variant="heading">Projects</Typography>
-          <Typography css={{ fontSize: "medium" }}>
+          <div className="title-row">
+            <Link to="/about-me" title="Back to About me">
+              <FaChevronLeft size={24} />
+            </Link>
+            <Typography variant="heading">Projects</Typography>
+          </div>
+          <Typography css={{ fontSize: "medium", marginLeft: "40px" }}>
             Things I have developed
           </Typography>
         </div>

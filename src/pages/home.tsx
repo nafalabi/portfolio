@@ -31,10 +31,10 @@ const Home = () => {
         <Typography variant="heading">Software Engineer</Typography>
         <Typography variant="title">Hi, my name is Nanda Abi Fahmi.</Typography>
         <Typography variant="body" css={{ marginTop: "1rem" }}>
-          I am a well rounded Software Engineer, proficient in Web & Mobile
-          Development, I have a good knowledge in server management. I have
-          proven to have handled enterprise grade application with more than 5
-          years of experience.
+          I'm a software engineer with over 5 years of experience building
+          scalable applications. I love connecting the dots between product
+          development, backend APIs, and DevOps to create reliable and secure
+          solutions that bring ideas to life.
         </Typography>
         <Box css={{ display: "flex", marginTop: "2rem", gap: "1rem" }}>
           <Button color="blue" onClick={() => navigate("/about-me")}>

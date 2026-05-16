@@ -4,7 +4,7 @@ import Typography from "@/components/Typography";
 import Footer from "@/components/Footer";
 import emotionStyled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
-import { FaGlobe, FaReact, FaDatabase, FaTools } from "react-icons/fa";
+import { FaReact } from "react-icons/fa";
 import ExpertiseCard from "@/components/ExpertiseCard";
 import profileAvatar from "@/images/profile-avatar.jpeg";
 import Button from "@/components/Button";

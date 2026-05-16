@@ -50,7 +50,8 @@ jobs:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
-          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          personal_token: ${{ secrets.NAFALABI_GITHUB_IO_PERSONAL_ACCESS_TOKEN }}
           external_repository: nafalabi/nafalabi.github.io
           publish_branch: main
           publish_dir: ./dist
+          cname: nandaabi.my.id

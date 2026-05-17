@@ -147,10 +147,8 @@ const AboutMePage = () => {
                   I'm a <strong>versatile software engineer</strong> from <strong>Indonesia</strong> with over <strong>5 years</strong> of experience architecting and deploying scalable,
                   enterprise-grade applications.
                 </p>
-                <p style={{marginBottom: 0}}>
-                  I have a proven track record in driving comprehensive <strong>system
-                  modernization</strong>, from conducting cross-platform mobile migrations (React
-                  Native to Flutter) to <strong>optimizing cloud infrastructure</strong>.
+                <p style={{marginBottom: 0 }}>
+                  I help <strong>modernize technical ecosystems</strong>, with hands-on experience in migrating mobile applications to Flutter and <strong>streamlining cloud infrastructure</strong>.
                 </p>
               </div>
               <div className="avatar-container">

@@ -41,9 +41,6 @@ import TofMainHome from "@/images/screenshots/toffin/mainhomepage.png";
 import TofMyAccount from "@/images/screenshots/toffin/myaccount.png";
 import TofELearning from "@/images/screenshots/toffin/elearning.png";
 
-import FirChatInitial from "@/images/screenshots/fir-chatapp/init.png";
-import FirChatPreview from "@/images/screenshots/fir-chatapp/preview.gif";
-
 import IntaraDevice from "@/images/screenshots/intara/intara-device.png";
 import IntaraLogin from "@/images/screenshots/intara/intara-login.png";
 import IntaraOverview from "@/images/screenshots/intara/intara-overview.png";
@@ -63,7 +60,85 @@ import OPPaid from "@/images/screenshots/open-pos/pos-paid.webp";
 import OPPendingCash from "@/images/screenshots/open-pos/pos-pending-cash.webp";
 import OPPendingQris from "@/images/screenshots/open-pos/pos-pending-qris.webp";
 
+import PatunganDashboard from "@/images/screenshots/patungan_app/dashboard.webp";
+import PatunganLogin from "@/images/screenshots/patungan_app/login.webp";
+import PatunganDuePayment from "@/images/screenshots/patungan_app/payment-due-payment.webp";
+import PatunganDuesPlanFixed from "@/images/screenshots/patungan_app/payment-dues-by-plan-fixed.webp";
+import PatunganPlans from "@/images/screenshots/patungan_app/plans.webp";
+import PatunganSettings from "@/images/screenshots/patungan_app/settings.webp";
+import PatunganUsers from "@/images/screenshots/patungan_app/users.webp";
+
 const projects = [
+  {
+    title: "Patungan App",
+    images: [
+      PatunganPlans,
+      PatunganLogin,
+      PatunganDashboard,
+      PatunganDuesPlanFixed,
+      PatunganDuePayment,
+      PatunganUsers,
+      PatunganSettings,
+    ],
+    company: "Personal project",
+    description:
+      "Patungan App is a web application designed to manage shared expenses, recurring plans, and payment dues. Built with Go (Echo) and Templ, it features secure Firebase authentication, automated recurring billing plan schedules.",
+    techs: [
+      "Go",
+      "Echo",
+      "Templ",
+      "HTMX",
+      "TailwindCSS",
+      "PostgreSQL",
+      "Redis",
+      "Midtrans",
+      "Mayar.id",
+      "Firebase",
+    ],
+    links: [
+      {
+        link: "https://github.com/nafalabi/patungan_app",
+        text: (
+          <>
+            <FaGithub css={{ marginBottom: "-2px" }} />
+            &nbsp; Source
+          </>
+        ),
+      },
+    ],
+  },
+  {
+    images: [
+      OPPendingQris,
+      OPPendingCash,
+      OPCanceled,
+      OPComplete,
+      OPCreateProduct,
+      OPHomeCart,
+      OPListOrders,
+      OPListProduct,
+      OPMobileViewDetail,
+      OPMobileView,
+      OPPaid,
+      OPLogin,
+    ],
+    title: "Open POS",
+    company: "Personal project",
+    description:
+      "Open POS is an open sourced version of my thesis app at Nusamandiri. It was built with Go & React.js with Midtrans as the payment gateway. it features Cash POS, Dynamic QRIS POS, live notifier webhook through websocket.",
+    techs: ["Go", "Echo", "React.js", "Midtrans gateway", "Sqlite"],
+    links: [
+      {
+        text: (
+          <>
+            <FaGithub css={{ marginBottom: "-2px" }} />
+            &nbsp; Source
+          </>
+        ),
+        link: "https://github.com/nafalabi/open-pos",
+      },
+    ],
+  },
   {
     title: "Convenient Homepage",
     images: [
@@ -132,7 +207,7 @@ const projects = [
     title: "Toffin App",
     company: "Freelance (primercode)",
     description:
-      "Toffin App is a coffee company app\nIt provides E-Commerce, E-Learning, After-sales service, and things around coffee making\nBuilt with flutter, and currently is still in development",
+      "Toffin App is a coffee company app\nIt provides E-Commerce, E-Learning, After-sales service, and things around coffee making\nBuilt with flutter",
     techs: ["Flutter", "Odoo", "Firebase", "Twilio"],
     links: [
       {
@@ -143,38 +218,6 @@ const projects = [
           </>
         ),
         link: "https://primercode.net",
-      },
-    ],
-  },
-  {
-    images: [
-      OPPendingQris,
-      OPPendingCash,
-      OPCanceled,
-      OPComplete,
-      OPCreateProduct,
-      OPHomeCart,
-      OPListOrders,
-      OPListProduct,
-      OPMobileViewDetail,
-      OPMobileView,
-      OPPaid,
-      OPLogin,
-    ],
-    title: "Open POS",
-    company: "Personal project",
-    description:
-      "Open POS is an open sourced version of my thesis app at Nusamandiri. It was built with Go & React.js with Midtrans as the payment gateway. it features Cash POS, Dynamic QRIS POS, live notifier webhook through websocket.",
-    techs: ["Go", "Echo", "React.js", "Midtrans gateway", "Sqlite"],
-    links: [
-      {
-        text: (
-          <>
-            <FaGithub css={{ marginBottom: "-2px" }} />
-            &nbsp; Source
-          </>
-        ),
-        link: "https://github.com/nafalabi/open-pos",
       },
     ],
   },
@@ -227,34 +270,6 @@ const projects = [
           </>
         ),
         link: "https://intara-iot.vercel.app",
-      },
-    ],
-  },
-  {
-    images: [FirChatPreview, FirChatInitial],
-    title: "Firebase Simple Chat",
-    company: "Personal project",
-    description:
-      "Project to showcase implementation of a single-room chat app\nIt was built with firebase, react.js and go (cronjob)",
-    techs: ["Firebase", "React.js", "Go"],
-    links: [
-      {
-        text: (
-          <>
-            <FaGithub css={{ marginBottom: "-2px" }} />
-            &nbsp; Source
-          </>
-        ),
-        link: "https://github.com/nafalabi/firebase-simple-chat",
-      },
-      {
-        text: (
-          <>
-            <FaLink css={{ marginBottom: "-2px" }} />
-            &nbsp; Demo
-          </>
-        ),
-        link: "https://fir-chat-app-nafalabi.web.app/",
       },
     ],
   },
@@ -323,10 +338,10 @@ const ProjectsPage = () => {
             <Link to="/about-me" title="Back to About me">
               <FaChevronLeft size={24} />
             </Link>
-            <Typography variant="heading">Projects</Typography>
+            <Typography variant="heading">Personal Projects</Typography>
           </div>
           <Typography css={{ fontSize: "medium", marginLeft: "40px" }}>
-            Things I have developed
+            Things I have developed in my spare time
           </Typography>
         </div>
         <div className="content">

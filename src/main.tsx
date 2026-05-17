@@ -19,9 +19,9 @@ import "@fontsource/montserrat/latin-900-italic.css";
 import "./global.css";
 
 import { Global } from "@emotion/react";
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { createHashRouter, RouterProvider } from "react-router-dom";
+
+import { Outlet } from "react-router-dom";
+import { ViteReactSSG } from "vite-react-ssg";
 import ThemeProvider from "./theme";
 import Home from "./pages/home.tsx";
 import AboutMePage from "./pages/about-me.tsx";
@@ -45,35 +45,32 @@ const globalStyles = (
   />
 );
 
-const router = createHashRouter([
-  {
-    path: "/",
-    element: <Home />,
-    errorElement: <Error404 />,
-  },
-  {
-    path: "/about-me",
-    element: <AboutMePage />,
-  },
-  {
-    path: "/projects",
-    element: <ProjectsPage />,
-  },
-  {
-    path: "/experience",
-    element: <ExperiencePage />,
-  },
-  {
-    path: "/contact",
-    element: <ContactPage />,
-  },
-]);
-
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+function AppLayout() {
+  return (
     <ThemeProvider>
       {globalStyles}
-      <RouterProvider router={router} />
+      <Outlet />
     </ThemeProvider>
-  </React.StrictMode>,
-);
+  );
+}
+
+export const routes = [
+  {
+    path: "/",
+    element: <AppLayout />,
+    errorElement: <Error404 />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: "about-me", element: <AboutMePage /> },
+      { path: "projects", element: <ProjectsPage /> },
+      { path: "experience", element: <ExperiencePage /> },
+      { path: "contact", element: <ContactPage /> },
+      { path: "*", element: <Error404 /> },
+    ],
+  },
+];
+
+export const createRoot = ViteReactSSG({
+  routes,
+  basename: import.meta.env.BASE_URL,
+});

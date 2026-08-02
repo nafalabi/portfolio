@@ -63,7 +63,6 @@ const CardRoot = styled.div(({ theme }) => ({
     border: "1px solid rgba(0, 0, 0, 0.08)",
     transition: "all 0.25s ease",
     "&:hover": {
-      backgroundColor: "#f9f8f6",
       transform: "translateY(-2px)",
       boxShadow: "0 8px 28px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03)",
       borderColor: "rgba(0, 0, 0, 0.12)",

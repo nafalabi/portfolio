@@ -3,12 +3,24 @@ import Navbar from "@/components/Navbar";
 import Typography from "@/components/Typography";
 import Footer from "@/components/Footer";
 import emotionStyled from "@emotion/styled";
+import { keyframes } from "@emotion/react";
 import {
   FaEnvelope,
   FaGithub,
   FaLinkedin,
   FaPhoneSquareAlt,
 } from "react-icons/fa";
+
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const CONTACT_CHANNELS = [
   {
@@ -51,11 +63,15 @@ const Root = emotionStyled("div")(({ theme }) => ({
     flexDirection: "column",
     gap: "0.5rem",
     width: "100%",
+    opacity: 0,
+    animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards`,
   },
 
   "& .content": {
     marginTop: "2rem",
     width: "100%",
+    opacity: 0,
+    animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards`,
   },
 
   "& .lead-intro": {

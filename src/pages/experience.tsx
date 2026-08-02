@@ -90,6 +90,18 @@ const EXPERIENCE_DATA = [
 
 import { FaChevronLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { keyframes } from "@emotion/react";
+
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const TimelineWrapper = emotionStyled("div")(({ theme }) => ({
   position: "relative",
@@ -98,6 +110,8 @@ const TimelineWrapper = emotionStyled("div")(({ theme }) => ({
   gap: "2rem",
   marginTop: "2.5rem",
   paddingLeft: "0.5rem",
+  opacity: 0,
+  animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards`,
 
   [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
     paddingLeft: "0",
@@ -118,6 +132,8 @@ const Root = emotionStyled("div")(({ theme }) => ({
     flexDirection: "column",
     gap: "0.5rem",
     width: "100%",
+    opacity: 0,
+    animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards`,
   },
 
   "& .title-row": {

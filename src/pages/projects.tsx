@@ -2,10 +2,22 @@ import { lazy, Suspense } from "react";
 import Container from "@/components/Container";
 import Typography from "@/components/Typography";
 import emotionStyled from "@emotion/styled";
+import { keyframes } from "@emotion/react";
 import { FaGithub, FaLink, FaChevronLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 import CHIdleScreenshot from "@/images/screenshots/ch/ch-idle.png";
 import CHSearchOpen from "@/images/screenshots/ch/ch-search-panel-open.png";
@@ -289,6 +301,8 @@ const Root = emotionStyled("div")(({ theme }) => ({
     flexDirection: "column",
     gap: "0.5rem",
     width: "100%",
+    opacity: 0,
+    animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards`,
   },
 
   "& .title-row": {
@@ -313,6 +327,8 @@ const Root = emotionStyled("div")(({ theme }) => ({
 
   "& .content": {
     marginTop: "3rem",
+    opacity: 0,
+    animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards`,
   },
 
   "& #footer": {

@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Typography from "@/components/Typography";
 import Footer from "@/components/Footer";
 import emotionStyled from "@emotion/styled";
+import { keyframes } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
 import profileAvatar from "@/images/profile-avatar.jpeg";
 import Button from "@/components/Button";
@@ -10,6 +11,17 @@ import { SiTypescript, SiGo, SiPostgresql, SiFlutter } from "react-icons/si";
 import { FaReact } from "react-icons/fa";
 import { LuCloud } from "react-icons/lu";
 import { TbApi, TbInfinity } from "react-icons/tb";
+
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const TECH_EXPERTISE = [
   {
@@ -60,6 +72,8 @@ const Root = emotionStyled("div")(({ theme }) => ({
     flexDirection: "column",
     width: "100%",
     marginBottom: "2.5rem",
+    opacity: 0,
+    animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards`,
   },
 
   "& .section-title": {
@@ -96,6 +110,8 @@ const Root = emotionStyled("div")(({ theme }) => ({
 
   "& .content": {
     width: "100%",
+    opacity: 0,
+    animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards`,
   },
 
   "& .intro-text": {

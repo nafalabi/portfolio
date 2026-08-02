@@ -22,78 +22,73 @@ const Root = emotionStyled("div")(({ theme }) => ({
 
   "& .header-section": {
     display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: "column",
     width: "100%",
-    marginBottom: "2rem",
-    [`@media (max-width: ${theme.breakpoints.md}px)`]: {
-      flexDirection: "column",
-      textAlign: "center",
-      gap: "1.5rem",
-    },
+    marginBottom: "2.5rem",
   },
 
   "& .section-title": {
-    fontWeight: 500,
-    flex: 1,
-  },
-
-  "& .intro-top": {
     display: "flex",
-    flexDirection: "row",
-    gap: "3rem",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-    [`@media (max-width: ${theme.breakpoints.md}px)`]: {
-      flexDirection: "column-reverse",
-      alignItems: "flex-start",
-      textAlign: "left",
-    },
+    flexDirection: "column",
+    gap: "0.5rem",
   },
 
   "& .avatar-container": {
+    float: "right",
+    marginLeft: "2.5rem",
+    marginBottom: "1.5rem",
     flexShrink: 0,
     [`@media (max-width: ${theme.breakpoints.md}px)`]: {
-      alignSelf: "center",
+      float: "none",
+      display: "block",
+      margin: "0 auto 1.5rem auto",
+      textAlign: "center",
     },
     "& img": {
-      width: "180px",
-      height: "180px",
+      width: "200px",
+      height: "200px",
       borderRadius: "32px",
       objectFit: "cover",
-      boxShadow: theme.shadow[3],
+      boxShadow: "0 12px 36px rgba(0, 0, 0, 0.12)",
+      border: "4px solid rgba(255, 255, 255, 0.8)",
     },
   },
 
   "& .subsection-title": {
     marginTop: "4rem",
-    fontWeight: 500,
-    fontSize: theme.typography.title,
+    fontWeight: 600,
     marginBottom: "1.5rem",
   },
 
   "& .content": {
     width: "100%",
-    fontSize: "16px",
-    lineHeight: 1.6,
-
-    "& strong": {
-      fontWeight: "600",
-    }
   },
 
   "& .intro-text": {
-    marginTop: "1rem",
+    fontSize: "15px",
+    fontWeight: 400,
+    lineHeight: 1.45,
+    color: "#333333",
     "& p": {
-      marginBottom: "1.25rem",
-    }
+      margin: "0 0 0.65rem 0",
+    },
+    "& strong": {
+      fontWeight: 600,
+      color: "#000000",
+    },
+  },
+
+  "& .intro-greeting": {
+    fontSize: "15px",
+    fontWeight: 400,
+    margin: "0 0 0.65rem 0",
+    color: "#333333",
   },
 
   "& .sub-page-links": {
-    marginTop: "3rem",
-    marginBottom: "5rem",
+    clear: "both",
+    paddingTop: "1.5rem",
+    marginBottom: "3.5rem",
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -134,33 +129,28 @@ const AboutMePage = () => {
         <div className="header-section">
           <div className="section-title">
             <Typography variant="heading">About me</Typography>
-            <Typography css={{ fontSize: "medium", opacity: 0.8 }}>
-              Get to know Nanda Abi Fahmi
+            <Typography css={{ fontSize: "medium", opacity: 0.8, marginTop: "0.25rem" }}>
+              Get to know about me
             </Typography>
           </div>
         </div>
 
         <div className="content">
           <div className="intro-text">
-            <div className="intro-top">
-              <div style={{ flex: 1, minWidth: "300px" }}>
-                <p className="content" style={{marginTop: 0}}>Hi, my name is Nanda Abi Fahmi.</p>
-                <p className="content">
-                  I'm a <strong>versatile software engineer</strong> from <strong>Indonesia</strong> with over <strong>5 years</strong> of experience architecting and deploying scalable,
-                  enterprise-grade applications.
-                </p>
-                <p style={{marginBottom: 0 }}>
-                  I help <strong>modernize technical ecosystems</strong>, with hands-on experience in migrating mobile applications to Flutter and <strong>streamlining cloud infrastructure</strong>.
-                </p>
-              </div>
-              <div className="avatar-container">
-                <img src={profileAvatar} alt="Nanda Abi Fahmi" />
-              </div>
+            <div className="avatar-container">
+              <img src={profileAvatar} alt="Nanda Abi Fahmi" />
             </div>
+            <p className="intro-greeting">
+              Hi, my name is <strong>Nanda Abi Fahmi</strong>.
+            </p>
             <p>
-              I thrive on bridging the gap between <strong>product development</strong>,&nbsp;
-              backend <strong>API design</strong>, and <strong>DevOps</strong> to
-              consistently deliver highly available and secure software solutions.
+              I'm a <strong>software engineer</strong> from <strong>Indonesia</strong> with over <strong>5 years</strong> of experience architecting and deploying scalable, enterprise-grade applications.
+            </p>
+            <p>
+              I help <strong>modernize technical ecosystems</strong>, with hands-on experience in  <strong>streamlining cloud infrastructure</strong> and applications.
+            </p>
+            <p>
+              I thrive on bridging the gap between <strong>product development</strong>, backend <strong>API design</strong>, and <strong>DevOps</strong> to consistently deliver highly available and secure software solutions.
             </p>
             <p>
               My tech stack mainly are <strong>TypeScript</strong>, <strong>Go</strong>, <strong>React.js</strong>, and <strong>PostgreSQL</strong>, but I'm flexible and eager to adapt to other technologies.
@@ -172,7 +162,7 @@ const AboutMePage = () => {
             </div>
           </div>
 
-          <Typography variant="title" className="subsection-title">Technical Expertise:</Typography>
+          <Typography variant="title" className="subsection-title">Technical Expertise</Typography>
           <div className="expertise-grid">
             <ExpertiseCard
               icon={<LuGlobe size={24} />}

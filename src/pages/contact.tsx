@@ -20,8 +20,10 @@ const Root = emotionStyled("div")(({ theme }) => ({
   minHeight: "calc(100vh - 80px)",
 
   "& .section-title": {
-    fontWeight: 500,
-    marginBottom: "2.5rem",
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.5rem",
+    width: "100%",
   },
 
   "& .content": {
@@ -59,11 +61,13 @@ const ContactPage = () => {
         css={{
           margin: "0 0 auto",
           width: "100%",
+          paddingTop: "2rem",
+          paddingBottom: "4rem",
         }}
       >
         <div className="section-title">
           <Typography variant="heading">Contact</Typography>
-          <Typography css={{ fontSize: "medium" }}>
+          <Typography css={{ fontSize: "medium", opacity: 0.8, marginTop: "0.25rem" }}>
             Get in touch with me
           </Typography>
         </div>

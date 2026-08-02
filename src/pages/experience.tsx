@@ -114,9 +114,9 @@ const Root = emotionStyled("div")(({ theme }) => ({
   minHeight: "calc(100vh - 80px)",
 
   "& .section-title": {
-    fontWeight: 500,
     display: "flex",
     flexDirection: "column",
+    gap: "0.5rem",
     width: "100%",
   },
 
@@ -172,7 +172,7 @@ const ExperiencePage = () => {
             </Link>
             <Typography variant="heading">Experience</Typography>
           </div>
-          <Typography css={{ fontSize: "medium", marginLeft: "40px" }}>
+          <Typography css={{ fontSize: "medium", opacity: 0.8, marginTop: "0.25rem" }}>
             My professional journey
           </Typography>
         </div>

@@ -285,10 +285,9 @@ const Root = emotionStyled("div")(({ theme }) => ({
   minHeight: "calc(100vh - 80px)",
 
   "& .section-title": {
-    fontWeight: 500,
-    marginBottom: "2.5rem",
     display: "flex",
     flexDirection: "column",
+    gap: "0.5rem",
     width: "100%",
   },
 
@@ -331,6 +330,8 @@ const ProjectsPage = () => {
         css={{
           margin: "0 0 auto",
           width: "100%",
+          paddingTop: "2rem",
+          paddingBottom: "4rem",
         }}
       >
         <div className="section-title">
@@ -340,7 +341,7 @@ const ProjectsPage = () => {
             </Link>
             <Typography variant="heading">Personal Projects</Typography>
           </div>
-          <Typography css={{ fontSize: "medium", marginLeft: "40px" }}>
+          <Typography css={{ fontSize: "medium", opacity: 0.8, marginTop: "0.25rem" }}>
             Things I have developed in my spare time
           </Typography>
         </div>

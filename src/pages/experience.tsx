@@ -91,6 +91,19 @@ const EXPERIENCE_DATA = [
 import { FaChevronLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+const TimelineWrapper = emotionStyled("div")(({ theme }) => ({
+  position: "relative",
+  display: "flex",
+  flexDirection: "column",
+  gap: "2rem",
+  marginTop: "2.5rem",
+  paddingLeft: "0.5rem",
+
+  [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+    paddingLeft: "0",
+  },
+}));
+
 const Root = emotionStyled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -128,7 +141,6 @@ const Root = emotionStyled("div")(({ theme }) => ({
   },
 
   "& .content": {
-    marginTop: "3rem",
     fontSize: "16px",
 
     "& strong": {
@@ -149,6 +161,8 @@ const ExperiencePage = () => {
         css={{
           margin: "0 0 auto",
           width: "100%",
+          paddingTop: "2rem",
+          paddingBottom: "4rem",
         }}
       >
         <div className="section-title">
@@ -163,11 +177,11 @@ const ExperiencePage = () => {
           </Typography>
         </div>
         <div className="content">
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <TimelineWrapper>
             {EXPERIENCE_DATA.map((exp, index) => (
               <ExperienceCard key={index} {...exp} />
             ))}
-          </div>
+          </TimelineWrapper>
           <br/>
         </div>
       </Container>

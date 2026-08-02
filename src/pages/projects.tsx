@@ -70,44 +70,6 @@ import PatunganUsers from "@/images/screenshots/patungan_app/users.webp";
 
 const projects = [
   {
-    title: "Patungan App",
-    images: [
-      PatunganPlans,
-      PatunganLogin,
-      PatunganDashboard,
-      PatunganDuesPlanFixed,
-      PatunganDuePayment,
-      PatunganUsers,
-      PatunganSettings,
-    ],
-    company: "Personal project",
-    description:
-      "Patungan App is a web application designed to manage shared expenses, recurring plans, and payment dues. Built with Go (Echo) and Templ, it features secure Firebase authentication, automated recurring billing plan schedules.",
-    techs: [
-      "Go",
-      "Echo",
-      "Templ",
-      "HTMX",
-      "TailwindCSS",
-      "PostgreSQL",
-      "Redis",
-      "Midtrans",
-      "Mayar.id",
-      "Firebase",
-    ],
-    links: [
-      {
-        link: "https://github.com/nafalabi/patungan_app",
-        text: (
-          <>
-            <FaGithub css={{ marginBottom: "-2px" }} />
-            &nbsp; Source
-          </>
-        ),
-      },
-    ],
-  },
-  {
     images: [
       OPPendingQris,
       OPPendingCash,
@@ -169,6 +131,32 @@ const projects = [
   },
   {
     images: [
+      TofIntro,
+      TofRegister,
+      TofForgotPass,
+      TofMainHome,
+      TofMyAccount,
+      TofELearning,
+    ],
+    title: "Toffin App",
+    company: "Freelance (primercode)",
+    description:
+      "Toffin App is a coffee company app\nIt provides E-Commerce, E-Learning, After-sales service, and things around coffee making\nBuilt with flutter",
+    techs: ["Flutter", "Odoo", "Firebase", "Twilio"],
+    links: [
+      {
+        text: (
+          <>
+            <FaLink css={{ marginBottom: "-2px" }} />
+            &nbsp; Primercode
+          </>
+        ),
+        link: "https://primercode.net",
+      },
+    ],
+  },
+  {
+    images: [
       SARALanding,
       SARALogin,
       SARAMainDashboard,
@@ -192,32 +180,6 @@ const projects = [
           </>
         ),
         link: "https://hotelservices.online",
-      },
-    ],
-  },
-  {
-    images: [
-      TofIntro,
-      TofRegister,
-      TofForgotPass,
-      TofMainHome,
-      TofMyAccount,
-      TofELearning,
-    ],
-    title: "Toffin App",
-    company: "Freelance (primercode)",
-    description:
-      "Toffin App is a coffee company app\nIt provides E-Commerce, E-Learning, After-sales service, and things around coffee making\nBuilt with flutter",
-    techs: ["Flutter", "Odoo", "Firebase", "Twilio"],
-    links: [
-      {
-        text: (
-          <>
-            <FaLink css={{ marginBottom: "-2px" }} />
-            &nbsp; Primercode
-          </>
-        ),
-        link: "https://primercode.net",
       },
     ],
   },
@@ -270,6 +232,44 @@ const projects = [
           </>
         ),
         link: "https://intara-iot.vercel.app",
+      },
+    ],
+  },
+  {
+    title: "Patungan App",
+    images: [
+      PatunganDashboard,
+      PatunganPlans,
+      PatunganLogin,
+      PatunganDuesPlanFixed,
+      PatunganDuePayment,
+      PatunganUsers,
+      PatunganSettings,
+    ],
+    company: "Personal project",
+    description:
+      "Patungan App is a web application designed to manage shared expenses, recurring plans, and payment dues. Built with Go (Echo) and Templ, it features secure Firebase authentication, automated recurring billing plan schedules.",
+    techs: [
+      "Go",
+      "Echo",
+      "Templ",
+      "HTMX",
+      "TailwindCSS",
+      "PostgreSQL",
+      "Redis",
+      "Midtrans",
+      "Mayar.id",
+      "Firebase",
+    ],
+    links: [
+      {
+        link: "https://github.com/nafalabi/patungan_app",
+        text: (
+          <>
+            <FaGithub css={{ marginBottom: "-2px" }} />
+            &nbsp; Source
+          </>
+        ),
       },
     ],
   },

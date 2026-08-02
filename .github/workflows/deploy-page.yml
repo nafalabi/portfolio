@@ -1,57 +1,64 @@
-name: Deploy to github pages
+name: Tag-Driven Release & GitHub Pages Deployment
 
 on:
-  # Runs on pushes targeting the default branch
   push:
-    branches: ["source"]
-
-  # Allows you to run this workflow manually from the Actions tab
+    tags:
+      - "v*"
   workflow_dispatch:
 
-    # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "24"
+          cache: "yarn"
 
       - name: Install Dependencies
         run: |
           npm i -g yarn
           yarn install --frozen-lockfile --ignore-engines
 
-      - name: Build with Vite
+      - name: Build with Vite SSG
         run: yarn build
 
       - name: Optimize Images
         run: yarn optimize
 
-      - name: Deploy
+      - name: Setup CNAME
+        run: echo "nandaabi.my.id" > ./dist/CNAME
+
+      - name: Deploy to Target Repository (nafalabi/nafalabi.github.io)
         uses: peaceiris/actions-gh-pages@v4
         with:
-          personal_token: ${{ secrets.NAFALABI_GITHUB_IO_PERSONAL_ACCESS_TOKEN }}
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           external_repository: nafalabi/nafalabi.github.io
           publish_branch: main
           publish_dir: ./dist
           cname: nandaabi.my.id
+
+  create-release:
+    needs: build-and-deploy
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Create GitHub Release in Portfolio
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

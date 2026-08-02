@@ -139,15 +139,20 @@ const Root = emotionStyled("div")(({ theme }) => ({
   "& .tech-badge-grid": {
     display: "grid",
     gridTemplateColumns: "repeat(4, 1fr)",
-    gap: "1rem",
+    gap: "0.85rem",
     marginTop: "1.25rem",
+    width: "100%",
     [`@media (max-width: ${theme.breakpoints.lg}px)`]: {
       gridTemplateColumns: "repeat(3, 1fr)",
     },
     [`@media (max-width: ${theme.breakpoints.md}px)`]: {
       gridTemplateColumns: "repeat(2, 1fr)",
     },
-    [`@media (max-width: ${theme.breakpoints.xs}px)`]: {
+    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      gridTemplateColumns: "repeat(2, 1fr)",
+      gap: "0.6rem",
+    },
+    [`@media (max-width: 380px)`]: {
       gridTemplateColumns: "1fr",
     },
   },
@@ -155,21 +160,26 @@ const Root = emotionStyled("div")(({ theme }) => ({
   "& .tech-badge-card": {
     display: "flex",
     alignItems: "center",
-    gap: "0.85rem",
+    gap: "0.65rem",
     backgroundColor: "#ffffff",
-    padding: "0.85rem 1.1rem",
+    padding: "0.75rem 0.85rem",
     borderRadius: "12px",
     boxShadow: "0 4px 14px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03)",
     border: "1px solid rgba(0, 0, 0, 0.06)",
     transition: "transform 0.2s ease, box-shadow 0.2s ease",
+    minWidth: 0,
+    boxSizing: "border-box",
     "&:hover": {
       transform: "translateY(-2px)",
       boxShadow: "0 8px 20px rgba(0, 0, 0, 0.08)",
     },
     "& span": {
-      fontSize: "15px",
+      fontSize: "14px",
       fontWeight: 600,
       color: "#222222",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
     },
   },
 }));

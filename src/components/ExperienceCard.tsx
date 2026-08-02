@@ -11,9 +11,7 @@ const CardRoot = styled.div(({ theme }) => ({
   alignItems: "flex-start",
 
   [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-    flexDirection: "column",
-    alignItems: "stretch",
-    gap: "1rem",
+    gap: "0.85rem",
   },
 
   "& .node-wrapper": {
@@ -24,6 +22,9 @@ const CardRoot = styled.div(({ theme }) => ({
     flexDirection: "column",
     alignItems: "center",
     width: "32px",
+    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      width: "24px",
+    },
   },
 
   "&:not(:last-child)::after": {
@@ -37,7 +38,8 @@ const CardRoot = styled.div(({ theme }) => ({
     borderRadius: "1px",
     zIndex: 1,
     [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-      display: "none",
+      left: "11px",
+      top: "34px",
     },
   },
 
@@ -52,6 +54,11 @@ const CardRoot = styled.div(({ theme }) => ({
     boxShadow: `0 0 0 4px ${theme.colors.background}`,
     border: "2px solid #ffffff",
     boxSizing: "border-box",
+    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      width: "14px",
+      height: "14px",
+      marginTop: "26px",
+    },
   },
 
   "& .card-body": {
@@ -62,10 +69,14 @@ const CardRoot = styled.div(({ theme }) => ({
     boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)",
     border: "1px solid rgba(0, 0, 0, 0.08)",
     transition: "all 0.25s ease",
+    minWidth: 0,
     "&:hover": {
       transform: "translateY(-2px)",
       boxShadow: "0 8px 28px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03)",
       borderColor: "rgba(0, 0, 0, 0.12)",
+    },
+    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+      padding: "1.25rem 1.25rem",
     },
   },
 

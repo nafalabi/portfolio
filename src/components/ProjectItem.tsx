@@ -401,6 +401,28 @@ const ProjectItem = ({
     }
   };
 
+  // Mouse wheel & trackpad scroll handler for cycling images
+  const isWheelCoolingDown = useRef(false);
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (images.length <= 1) return;
+    if (isWheelCoolingDown.current) return;
+
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+
+    if (Math.abs(delta) > 15) {
+      isWheelCoolingDown.current = true;
+      if (delta > 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+      setTimeout(() => {
+        isWheelCoolingDown.current = false;
+      }, 300);
+    }
+  };
+
   // Keyboard navigation for lightbox
   useEffect(() => {
     if (!isLightboxOpen) return;
@@ -430,6 +452,7 @@ const ProjectItem = ({
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
+            onWheel={handleWheel}
             title="Click for full preview"
           >
             {!isLoaded && <div className="skeleton-placeholder" />}
@@ -510,6 +533,7 @@ const ProjectItem = ({
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          onWheel={handleWheel}
         >
           <div
             className="lightbox-header"

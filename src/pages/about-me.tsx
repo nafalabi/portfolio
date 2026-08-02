@@ -119,6 +119,7 @@ const Root = emotionStyled("div")(({ theme }) => ({
 
 const AboutMePage = () => {
   const navigate = useNavigate();
+
   return (
     <Root>
       <Navbar />
@@ -127,6 +128,7 @@ const AboutMePage = () => {
           margin: "0 0 auto",
           width: "100%",
           paddingTop: "2rem",
+          paddingBottom: "4rem",
         }}
       >
         <div className="header-section">
@@ -165,8 +167,8 @@ const AboutMePage = () => {
             </p>
 
             <div className="sub-page-links">
-              <Button color="red" onClick={() => navigate("/experience")}>View Experiences</Button>
-              <Button color="red" variant="outlined" onClick={() => navigate("/projects")}>Explore Side Projects</Button>
+              <Button color="blue" onClick={() => navigate("/experience")}>View Experiences</Button>
+              <Button color="red" onClick={() => navigate("/projects")}>Explore Side Projects</Button>
             </div>
           </div>
 

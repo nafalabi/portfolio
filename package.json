@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "deploy": "yarn build && yarn optimize && yarn deploy-files",
     "deploy-files": "gh-pages -d dist -r https://github.com/nafalabi/nafalabi.github.io -b main",
-    "optimize": "node ./script/optimize-image.js"
+    "optimize": "node ./script/optimize-image.js",
+    "tag": "./script/create-tag.sh",
+    "release-tag": "./script/create-tag.sh"
   },
   "dependencies": {
     "@emotion/css": "^11.13.5",

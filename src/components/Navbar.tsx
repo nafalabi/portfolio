@@ -55,12 +55,9 @@ const NavList = styled.ul<{ expanded: boolean }>(({ theme, expanded }) => ({
     display: "inline-flex",
     alignItems: "center",
     gap: "0.5rem",
-    transition: "color 0.2s ease",
+    transition: "opacity 0.2s ease",
     "&:hover": {
-      color: theme.colors.button.blue,
-    },
-    "&.active": {
-      color: theme.colors.button.blue,
+      opacity: 0.7,
     },
   },
 
@@ -162,7 +159,6 @@ const Navbar = () => {
         </MenuToggleButton>
         <NavList expanded={expanded}>
           {items.map(({ name, link, isExternal, icon }) => {
-            const isActive = pathname === link;
             return (
               <li key={name}>
                 {isExternal ? (
@@ -177,7 +173,6 @@ const Navbar = () => {
                 ) : (
                   <Link
                     to={link}
-                    className={isActive ? "active" : ""}
                     onClick={() => setExpanded(false)}
                   >
                     {icon} {name}

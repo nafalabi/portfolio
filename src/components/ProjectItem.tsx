@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
+import { keyframes } from "@emotion/react";
 import { useState, useEffect, useCallback, useRef } from "react";
+import { createPortal } from "react-dom";
 import { FaChevronLeft, FaChevronRight, FaTimes, FaSearchPlus } from "react-icons/fa";
 
 const RootProjectItem = styled.div(({ theme }) => ({
@@ -215,6 +217,15 @@ const RootProjectItem = styled.div(({ theme }) => ({
   },
 }));
 
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
 const LightboxOverlay = styled.div({
   position: "fixed",
   inset: 0,
@@ -225,7 +236,7 @@ const LightboxOverlay = styled.div({
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
-  animation: "fadeIn 0.2s ease-out",
+  animation: `${fadeIn} 0.2s ease-out`,
   padding: "1rem",
 
   "& .lightbox-header": {
@@ -335,7 +346,12 @@ const ProjectItem = ({
   const [currentIdx, setCurrentIdx] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Check if image is already cached/complete on index change
   useEffect(() => {
@@ -527,60 +543,63 @@ const ProjectItem = ({
       </div>
 
       {/* Medium-style Fullscreen Lightbox Modal */}
-      {isLightboxOpen && (
-        <LightboxOverlay
-          onClick={() => setIsLightboxOpen(false)}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-          onWheel={handleWheel}
-        >
-          <div
-            className="lightbox-header"
-            onClick={(e) => e.stopPropagation()}
+      {isLightboxOpen &&
+        isMounted &&
+        createPortal(
+          <LightboxOverlay
+            onClick={() => setIsLightboxOpen(false)}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onWheel={handleWheel}
           >
-            <span className="lightbox-title">
-              {title} ({currentIdx + 1} of {images.length})
-            </span>
-            <button
-              className="close-btn"
-              onClick={() => setIsLightboxOpen(false)}
-              title="Close preview (Esc)"
+            <div
+              className="lightbox-header"
+              onClick={(e) => e.stopPropagation()}
             >
-              <FaTimes size={18} />
-            </button>
-          </div>
-
-          <div
-            className="lightbox-image-container"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              src={images[currentIdx]}
-              alt={`${title} enlarged screenshot ${currentIdx + 1}`}
-            />
-          </div>
-
-          {images.length > 1 && (
-            <>
+              <span className="lightbox-title">
+                {title} ({currentIdx + 1} of {images.length})
+              </span>
               <button
-                className="lightbox-nav prev"
-                onClick={handlePrev}
-                title="Previous image (←)"
+                className="close-btn"
+                onClick={() => setIsLightboxOpen(false)}
+                title="Close preview (Esc)"
               >
-                <FaChevronLeft size={22} />
+                <FaTimes size={18} />
               </button>
-              <button
-                className="lightbox-nav next"
-                onClick={handleNext}
-                title="Next image (→)"
-              >
-                <FaChevronRight size={22} />
-              </button>
-            </>
-          )}
-        </LightboxOverlay>
-      )}
+            </div>
+
+            <div
+              className="lightbox-image-container"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={images[currentIdx]}
+                alt={`${title} enlarged screenshot ${currentIdx + 1}`}
+              />
+            </div>
+
+            {images.length > 1 && (
+              <>
+                <button
+                  className="lightbox-nav prev"
+                  onClick={handlePrev}
+                  title="Previous image (←)"
+                >
+                  <FaChevronLeft size={22} />
+                </button>
+                <button
+                  className="lightbox-nav next"
+                  onClick={handleNext}
+                  title="Next image (→)"
+                >
+                  <FaChevronRight size={22} />
+                </button>
+              </>
+            )}
+          </LightboxOverlay>,
+          document.body
+        ) as unknown as React.ReactNode}
     </RootProjectItem>
   );
 };

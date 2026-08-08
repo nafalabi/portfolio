@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import Box from "@/components/Box";
 import Button from "@/components/Button";
 import Container from "@/components/Container";
@@ -18,6 +19,87 @@ const fadeInUp = keyframes`
     transform: translateY(0);
   }
 `;
+
+const radarPulse = keyframes`
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+    box-shadow: 0 0 0 0 rgba(1, 1, 2, 0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(1, 1, 2, 0.25);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.8);
+    box-shadow: 0 0 0 12px rgba(1, 1, 2, 0);
+  }
+`;
+
+const PlayIndicatorButton = styled("button")(({ theme }) => ({
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "flex-start",
+  height: "40px",
+  padding: "0 8px",
+  borderRadius: "20px",
+  border: "1px solid transparent",
+  backgroundColor: "transparent",
+  color: theme.colors.text,
+  fontSize: "0.875rem",
+  fontWeight: 600,
+  cursor: "pointer",
+  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+  position: "relative",
+  overflow: "visible",
+  whiteSpace: "nowrap" as const,
+  outline: "none",
+
+  "& .dot-container": {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "16px",
+    height: "16px",
+    flexShrink: 0,
+  },
+
+  "& .dot": {
+    width: "8px",
+    height: "8px",
+    borderRadius: "50%",
+    backgroundColor: theme.colors.text,
+    animation: `${radarPulse} 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite`,
+    flexShrink: 0,
+  },
+
+  "& .label": {
+    maxWidth: "0px",
+    opacity: 0,
+    overflow: "hidden",
+    display: "inline-block",
+    transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+  },
+
+  "&:hover, &:focus-visible, &.is-expanded": {
+    padding: "0 16px",
+    backgroundColor: "rgba(1, 1, 2, 0.06)",
+    borderColor: "rgba(1, 1, 2, 0.2)",
+    boxShadow: "0 2px 10px rgba(0, 0, 0, 0.05)",
+    "& .label": {
+      maxWidth: "140px",
+      opacity: 1,
+      marginLeft: "8px",
+    },
+    "& .dot": {
+      animation: "none",
+      opacity: 1,
+      transform: "scale(1)",
+    },
+  },
+}));
 
 const RootMain = styled("main")(({ theme }) => ({
   display: "flex",
@@ -53,6 +135,18 @@ const RootMain = styled("main")(({ theme }) => ({
 
 const Home = () => {
   const navigate = useNavigate();
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleIndicatorClick = (e: React.MouseEvent) => {
+    if (!isExpanded) {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsExpanded(true);
+    } else {
+      navigate("/snake");
+    }
+  };
+
   return (
     <RootMain>
       <Navbar />
@@ -72,13 +166,25 @@ const Home = () => {
           </Typography>
         </div>
         <div className="hero-item-4">
-          <Box css={{ display: "flex", marginTop: "2rem", gap: "1rem" }}>
+          <Box css={{ display: "flex", marginTop: "2rem", gap: "1rem", alignItems: "center" }}>
             <Button color="blue" onClick={() => navigate("/about-me")}>
               About me
             </Button>
             <Button color="red" onClick={() => navigate("/contact")}>
               Contact
             </Button>
+            <PlayIndicatorButton
+              className={isExpanded ? "is-expanded" : ""}
+              onClick={handleIndicatorClick}
+              onMouseEnter={() => setIsExpanded(true)}
+              onMouseLeave={() => setIsExpanded(false)}
+              title="Play Snake"
+            >
+              <span className="dot-container">
+                <span className="dot" />
+              </span>
+              <span className="label">Let's play 🐍</span>
+            </PlayIndicatorButton>
           </Box>
         </div>
       </Container>

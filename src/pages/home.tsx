@@ -20,6 +20,39 @@ const fadeInUp = keyframes`
   }
 `;
 
+const fadeOutDown = keyframes`
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+`;
+
+const fadeOutDownOnly = keyframes`
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+`;
+
+const fadeOutUp = keyframes`
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+`;
+
 const radarPulse = keyframes`
   0% {
     opacity: 0;
@@ -101,7 +134,7 @@ const PlayIndicatorButton = styled("button")(({ theme }) => ({
   },
 }));
 
-const RootMain = styled("main")(({ theme }) => ({
+const RootMain = styled("main")<{ isExiting?: boolean }>(({ theme, isExiting }) => ({
   display: "flex",
   flexDirection: "column",
   height: "100vh",
@@ -115,41 +148,68 @@ const RootMain = styled("main")(({ theme }) => ({
     },
   },
 
-  "& .hero-item-1": {
-    opacity: 0,
-    animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards`,
-  },
-  "& .hero-item-2": {
-    opacity: 0,
-    animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards`,
-  },
-  "& .hero-item-3": {
-    opacity: 0,
-    animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards`,
-  },
-  "& .hero-item-4": {
-    opacity: 0,
-    animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards`,
-  },
+  "& .nav-wrapper": isExiting
+    ? { animation: `${fadeOutUp} 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.32s forwards` }
+    : {},
+  "& .footer-wrapper": isExiting
+    ? { animation: `${fadeOutDownOnly} 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.32s forwards` }
+    : {},
+
+  "& .hero-item-1": isExiting
+    ? { animation: `${fadeOutDown} 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.24s forwards` }
+    : {
+        opacity: 0,
+        animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards`,
+      },
+  "& .hero-item-2": isExiting
+    ? { animation: `${fadeOutDown} 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.16s forwards` }
+    : {
+        opacity: 0,
+        animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards`,
+      },
+  "& .hero-item-3": isExiting
+    ? { animation: `${fadeOutDown} 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.08s forwards` }
+    : {
+        opacity: 0,
+        animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards`,
+      },
+  "& .hero-item-4": isExiting
+    ? { animation: `${fadeOutDown} 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.0s forwards` }
+    : {
+        opacity: 0,
+        animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards`,
+      },
 }));
 
 const Home = () => {
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
+
+  const handleNavigateWithDispose = (targetPath: string) => {
+    setIsExiting(true);
+    setTimeout(() => {
+      navigate(targetPath);
+    }, 650);
+  };
 
   const handleIndicatorClick = (e: React.MouseEvent) => {
-    if (!isExpanded) {
-      e.preventDefault();
-      e.stopPropagation();
-      setIsExpanded(true);
-    } else {
-      navigate("/snake");
+    if (typeof window !== "undefined" && window.innerWidth <= 768) {
+      if (!isExpanded) {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsExpanded(true);
+        return;
+      }
     }
+    handleNavigateWithDispose("/snake");
   };
 
   return (
-    <RootMain>
-      <Navbar />
+    <RootMain isExiting={isExiting}>
+      <div className="nav-wrapper">
+        <Navbar />
+      </div>
       <Container className="container">
         <div className="hero-item-1">
           <Typography variant="heading">Software Engineer</Typography>
@@ -188,7 +248,9 @@ const Home = () => {
           </Box>
         </div>
       </Container>
-      <Footer />
+      <div className="footer-wrapper">
+        <Footer />
+      </div>
     </RootMain>
   );
 };

@@ -3,8 +3,32 @@ import styled from "@emotion/styled";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import Typography from "@/components/Typography";
+import { keyframes } from "@emotion/react";
+import { useNavigate } from "react-router-dom";
 
-const RootMain = styled("main")(({ theme }) => ({
+const fadeInUp = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+`;
+
+const fadeOutDown = keyframes`
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+`;
+
+const RootMain = styled("main")<{ isExiting?: boolean }>(({ theme, isExiting }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
@@ -19,6 +43,37 @@ const RootMain = styled("main")(({ theme }) => ({
     flexDirection: "column",
     alignItems: "center",
   },
+
+  "& .snake-item-1": isExiting
+    ? { animation: `${fadeOutDown} 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.32s forwards` }
+    : {
+        opacity: 0,
+        animation: `${fadeInUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both`,
+      },
+  "& .snake-item-2": isExiting
+    ? { animation: `${fadeOutDown} 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.24s forwards` }
+    : {
+        opacity: 0,
+        animation: `${fadeInUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.20s both`,
+      },
+  "& .snake-item-3": isExiting
+    ? { animation: `${fadeOutDown} 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.16s forwards` }
+    : {
+        opacity: 0,
+        animation: `${fadeInUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both`,
+      },
+  "& .snake-item-4": isExiting
+    ? { animation: `${fadeOutDown} 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.08s forwards` }
+    : {
+        opacity: 0,
+        animation: `${fadeInUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.44s both`,
+      },
+  "& .snake-item-5": isExiting
+    ? { animation: `${fadeOutDown} 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.0s forwards` }
+    : {
+        opacity: 0,
+        animation: `${fadeInUp} 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.56s both`,
+      },
 }));
 
 const ArcadeHeader = styled("div")({
@@ -254,11 +309,13 @@ const SPEED_FRAMES: Record<DifficultyLevel, number> = {
 };
 
 const SnakePage: React.FC = () => {
+  const navigate = useNavigate();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   const [gameState, setGameState] = useState<"idle" | "playing" | "paused" | "gameover">("idle");
   const [difficulty, setDifficulty] = useState<DifficultyLevel>("normal");
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+  const [isExiting, setIsExiting] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
   const [highScore, setHighScore] = useState<number>(() => {
     if (typeof window !== "undefined") {
@@ -267,6 +324,13 @@ const SnakePage: React.FC = () => {
     }
     return 0;
   });
+
+  const handleNavigateWithDispose = useCallback((targetPath: string) => {
+    setIsExiting(true);
+    setTimeout(() => {
+      navigate(targetPath);
+    }, 650);
+  }, [navigate]);
 
   // Mutable game state stored in refs to avoid closure stale state in animation loop
   const snakeRef = useRef<{
@@ -485,119 +549,155 @@ const SnakePage: React.FC = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [changeDirection, pauseGame]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // Push dummy history entry so back button triggers popstate event
+    window.history.pushState({ page: "snake" }, "", window.location.href);
+
+    const handlePopState = () => {
+      setIsExiting(true);
+      setTimeout(() => {
+        navigate("/");
+      }, 650);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [navigate]);
+
   return (
-    <RootMain>
+    <RootMain isExiting={isExiting}>
       <Container className="container">
-        <Typography variant="title" css={{ marginBottom: "0.25rem", fontWeight: 600, textAlign: "center" }}>
-          Let's see how good you are
-        </Typography>
-        <Typography variant="body2" css={{ color: "#55555e", fontSize: "0.8rem", marginBottom: "1.25rem", textAlign: "center" }}>
-          Use Arrow Keys or WASD to navigate
-        </Typography>
+        <div className="snake-item-1" style={{ width: "100%", textAlign: "center" }}>
+          <Typography variant="title" css={{ marginBottom: "0.25rem", fontWeight: 600, textAlign: "center" }}>
+            Let's see how good you are 😉
+          </Typography>
+        </div>
 
-        <ArcadeHeader>
-          <ScoreBadge className="score-left">
-            <span className="label">Score</span>
-            <span className="value">{score}</span>
-          </ScoreBadge>
+        <div className="snake-item-2" style={{ width: "100%", textAlign: "center" }}>
+          <Typography variant="body2" css={{ color: "#55555e", fontSize: "0.8rem", marginBottom: "1.25rem", textAlign: "center" }}>
+            Use Arrow Keys or WASD to navigate
+          </Typography>
+        </div>
 
-          <HeaderActionGroup>
-            <IconActionButton
-              onClick={pauseGame}
-              title={gameState === "paused" ? "Resume Game" : "Pause Game"}
-              aria-label="Pause/Resume"
-            >
-              {gameState === "paused" ? (
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                  <polygon points="6 4 20 12 6 20" />
+        <div className="snake-item-3" style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+          <ArcadeHeader>
+            <ScoreBadge className="score-left">
+              <span className="label">Score</span>
+              <span className="value">{score}</span>
+            </ScoreBadge>
+
+            <HeaderActionGroup>
+              <IconActionButton onClick={() => handleNavigateWithDispose("/")} title="Back to Home" aria-label="Back to Home">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 12H5" />
+                  <path d="M12 19l-7-7 7-7" />
                 </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                  <rect x="6" y="4" width="4" height="16" rx="1" />
-                  <rect x="14" y="4" width="4" height="16" rx="1" />
+              </IconActionButton>
+              <IconActionButton
+                onClick={pauseGame}
+                title={gameState === "paused" ? "Resume Game" : "Pause Game"}
+                aria-label="Pause/Resume"
+              >
+                {gameState === "paused" ? (
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <polygon points="6 4 20 12 6 20" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                    <rect x="6" y="4" width="4" height="16" rx="1" />
+                    <rect x="14" y="4" width="4" height="16" rx="1" />
+                  </svg>
+                )}
+              </IconActionButton>
+
+              <IconActionButton onClick={startGame} title="Restart Game" aria-label="Restart Game">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                  <path d="M3 3v5h5" />
                 </svg>
-              )}
-            </IconActionButton>
+              </IconActionButton>
 
-            <IconActionButton onClick={startGame} title="Restart Game" aria-label="Restart Game">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                <path d="M3 3v5h5" />
-              </svg>
-            </IconActionButton>
+              <IconActionButton onClick={openSettings} title="Settings" aria-label="Settings">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+              </IconActionButton>
+            </HeaderActionGroup>
 
-            <IconActionButton onClick={openSettings} title="Settings" aria-label="Settings">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-              </svg>
-            </IconActionButton>
-          </HeaderActionGroup>
+            <ScoreBadge className="score-right">
+              <span className="label">High Score</span>
+              <span className="value high-value">{highScore}</span>
+            </ScoreBadge>
+          </ArcadeHeader>
+        </div>
 
-          <ScoreBadge className="score-right">
-            <span className="label">High Score</span>
-            <span className="value high-value">{highScore}</span>
-          </ScoreBadge>
-        </ArcadeHeader>
+        <div className="snake-item-4" style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+          <CanvasWrapper>
+            <CanvasElement ref={canvasRef} width={400} height={400} />
 
-        <CanvasWrapper>
-          <CanvasElement ref={canvasRef} width={400} height={400} />
+            {gameState === "idle" && (
+              <OverlayContainer>
+                <Typography variant="title" css={{ fontSize: "1.5rem" }}>
+                  Ready to Play?
+                </Typography>
+                <Button color="blue" onClick={startGame}>
+                  Start Game
+                </Button>
+              </OverlayContainer>
+            )}
 
-          {gameState === "idle" && (
-            <OverlayContainer>
-              <Typography variant="title" css={{ fontSize: "1.5rem" }}>
-                Ready to Play?
-              </Typography>
-              <Button color="blue" onClick={startGame}>
-                Start Game
-              </Button>
-            </OverlayContainer>
-          )}
+            {gameState === "paused" && (
+              <OverlayContainer>
+                <Typography variant="title" css={{ fontSize: "1.5rem" }}>
+                  Game Paused
+                </Typography>
+                <Button color="blue" onClick={pauseGame}>
+                  Resume
+                </Button>
+              </OverlayContainer>
+            )}
 
-          {gameState === "paused" && (
-            <OverlayContainer>
-              <Typography variant="title" css={{ fontSize: "1.5rem" }}>
-                Game Paused
-              </Typography>
-              <Button color="blue" onClick={pauseGame}>
-                Resume
-              </Button>
-            </OverlayContainer>
-          )}
+            {gameState === "gameover" && (
+              <OverlayContainer>
+                <Typography variant="title" css={{ fontSize: "1.75rem", color: "#991b1b" }}>
+                  Game Over!
+                </Typography>
+                <Typography variant="body" css={{ color: "#e4e4e7" }}>
+                  Final Score: <strong>{score}</strong>
+                </Typography>
+                <Button color="blue" onClick={startGame}>
+                  Play Again
+                </Button>
+              </OverlayContainer>
+            )}
+          </CanvasWrapper>
+        </div>
 
-          {gameState === "gameover" && (
-            <OverlayContainer>
-              <Typography variant="title" css={{ fontSize: "1.75rem", color: "#ef4444" }}>
-                Game Over!
-              </Typography>
-              <Typography variant="body" css={{ color: "#e4e4e7" }}>
-                Final Score: <strong>{score}</strong>
-              </Typography>
-              <Button color="blue" onClick={startGame}>
-                Play Again
-              </Button>
-            </OverlayContainer>
-          )}
-        </CanvasWrapper>
-
-        <ControlsPanel>
-          <DPadRow>
-            <DPadButton onClick={() => changeDirection(0, -GRID_SIZE)} aria-label="Up">
-              ▲
-            </DPadButton>
-          </DPadRow>
-          <DPadRow>
-            <DPadButton onClick={() => changeDirection(-GRID_SIZE, 0)} aria-label="Left">
-              ◀
-            </DPadButton>
-            <DPadButton onClick={() => changeDirection(0, GRID_SIZE)} aria-label="Down">
-              ▼
-            </DPadButton>
-            <DPadButton onClick={() => changeDirection(GRID_SIZE, 0)} aria-label="Right">
-              ▶
-            </DPadButton>
-          </DPadRow>
-        </ControlsPanel>
+        <div className="snake-item-5" style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+          <ControlsPanel>
+            <DPadRow>
+              <DPadButton onClick={() => changeDirection(0, -GRID_SIZE)} aria-label="Up">
+                ▲
+              </DPadButton>
+            </DPadRow>
+            <DPadRow>
+              <DPadButton onClick={() => changeDirection(-GRID_SIZE, 0)} aria-label="Left">
+                ◀
+              </DPadButton>
+              <DPadButton onClick={() => changeDirection(0, GRID_SIZE)} aria-label="Down">
+                ▼
+              </DPadButton>
+              <DPadButton onClick={() => changeDirection(GRID_SIZE, 0)} aria-label="Right">
+                ▶
+              </DPadButton>
+            </DPadRow>
+          </ControlsPanel>
+        </div>
       </Container>
 
       {isSettingsOpen && (

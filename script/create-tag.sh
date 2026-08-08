@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
+SHOULD_PUSH=false
+if [ "$1" = "--push" ] || [ "$1" = "push" ]; then
+  SHOULD_PUSH=true
+fi
+
 # Fetch latest tags from remote to ensure tag sync
 echo "Fetching latest tags from origin..."
 git fetch --tags --quiet 2>/dev/null || true
@@ -31,10 +36,17 @@ else
   NEW_TAG="${BASE_TAG}.${NEXT_SUFFIX}"
 fi
 
-echo "Creating tag: ${NEW_TAG}"
-git tag "${NEW_TAG}"
+if git rev-parse "${NEW_TAG}" >/dev/null 2>&1; then
+  echo "Tag ${NEW_TAG} already exists locally."
+else
+  echo "Creating tag: ${NEW_TAG}"
+  git tag "${NEW_TAG}"
+fi
 
-echo "Pushing tag ${NEW_TAG} to origin..."
-git push origin "${NEW_TAG}"
-
-echo "Done! Pushed tag ${NEW_TAG} to origin."
+if [ "$SHOULD_PUSH" = true ]; then
+  echo "Pushing tag ${NEW_TAG} to origin..."
+  git push origin "${NEW_TAG}"
+  echo "Done! Pushed tag ${NEW_TAG} to origin."
+else
+  echo "Done! Tag ${NEW_TAG} generated locally."
+fi

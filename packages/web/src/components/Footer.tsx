@@ -111,10 +111,8 @@ const Footer = () => {
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   const targetCompact = isScrollable && !isAtBottom;
-  const [renderedCompact, setRenderedCompact] = useState(() => {
-    return globalFooterCompactState || checkIsScrollable();
-  });
-  const [disableTransition, setDisableTransition] = useState(true);
+  const [renderedCompact, setRenderedCompact] = useState(globalFooterCompactState);
+  const [disableTransition, setDisableTransition] = useState(false);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -147,14 +145,7 @@ const Footer = () => {
 
     window.addEventListener("resize", updateScrollable);
 
-    // Briefly disable animation on page mount to prevent flash
-    setDisableTransition(true);
-    const transitionTimer = setTimeout(() => {
-      setDisableTransition(false);
-    }, 150);
-
     return () => {
-      clearTimeout(transitionTimer);
       observer.disconnect();
       resizeObserver.disconnect();
       window.removeEventListener("resize", updateScrollable);
@@ -166,8 +157,12 @@ const Footer = () => {
     const nowCompact = targetCompact;
 
     if (wasCompact === nowCompact) {
+      setDisableTransition(true);
       setRenderedCompact(nowCompact);
+      const timer = setTimeout(() => setDisableTransition(false), 50);
+      return () => clearTimeout(timer);
     } else {
+      setDisableTransition(false);
       setRenderedCompact(wasCompact);
       const raf = requestAnimationFrame(() => {
         setRenderedCompact(nowCompact);

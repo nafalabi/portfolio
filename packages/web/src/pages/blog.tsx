@@ -3,11 +3,9 @@ import Container from "@/components/Container";
 import Typography from "@/components/Typography";
 import emotionStyled from "@emotion/styled";
 import { keyframes } from "@emotion/react";
-import { FaChevronLeft } from "react-icons/fa";
 import { FaMedium } from "react-icons/fa6";
 import { HiArrowUpRight } from "react-icons/hi2";
 import { MdOutlineArticle } from "react-icons/md";
-import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BlogPostCard from "@/components/BlogPostCard";
@@ -59,26 +57,6 @@ const Root = emotionStyled("div")(({ theme }) => ({
     justifyContent: "space-between",
     flexWrap: "wrap",
     gap: "1rem",
-  },
-
-  "& .title-row": {
-    display: "flex",
-    alignItems: "center",
-    gap: "1rem",
-    "& a": {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      color: "inherit",
-      textDecoration: "none",
-      padding: "8px",
-      borderRadius: "50%",
-      transition: "background-color 0.2s",
-      marginLeft: "-12px",
-      "&:hover": {
-        backgroundColor: "rgba(0, 0, 0, 0.05)",
-      },
-    },
   },
 
   "& .medium-profile-link": {
@@ -388,12 +366,7 @@ const BlogPage = () => {
       >
         <div className="section-title">
           <div className="title-header">
-            <div className="title-row">
-              <Link to="/" title="Back to Home">
-                <FaChevronLeft size={24} />
-              </Link>
-              <Typography variant="heading">Blog</Typography>
-            </div>
+            <Typography variant="heading">Blog</Typography>
 
             <a
               href={MEDIUM_PROFILE_URL}

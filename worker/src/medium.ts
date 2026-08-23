@@ -89,3 +89,31 @@ function stripHtml(html: string): string {
 function countWords(text: string): number {
   return text.split(/\s+/).filter(Boolean).length;
 }
+
+export const FEED_URL = "https://medium.com/feed/@nandaabifahmi";
+
+export class UpstreamError extends Error {}
+
+export async function fetchPosts(
+  feedUrl: string = FEED_URL,
+  fetchImpl: typeof fetch = fetch
+): Promise<BlogPost[]> {
+  let response: Response;
+  try {
+    response = await fetchImpl(feedUrl);
+  } catch (error) {
+    throw new UpstreamError(
+      `feed request failed: ${error instanceof Error ? error.message : "unknown"}`
+    );
+  }
+  if (!response.ok) {
+    throw new UpstreamError(`feed responded with status ${response.status}`);
+  }
+  try {
+    return parseFeed(await response.text());
+  } catch (error) {
+    throw new UpstreamError(
+      `failed to parse feed: ${error instanceof Error ? error.message : "unknown"}`
+    );
+  }
+}

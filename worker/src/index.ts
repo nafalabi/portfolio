@@ -1,13 +1,32 @@
+import { fetchPosts, UpstreamError } from "./medium";
+
 export interface Env {
   CORS_ALLOWED_ORIGINS: string;
 }
 
+export const CACHE_KEY = "https://cache.internal/posts";
+
 export default {
   async fetch(request, env): Promise<Response> {
     const url = new URL(request.url);
+
     if (url.pathname === "/posts") {
-      return jsonResponse({ posts: [] }, 200, corsHeaders(request, env));
+      try {
+        const posts = await fetchPosts();
+        return jsonResponse({ posts }, 200, corsHeaders(request, env));
+      } catch (error) {
+        if (error instanceof UpstreamError) {
+          console.error(error.message);
+          return jsonResponse(
+            { error: "upstream_unavailable" },
+            502,
+            corsHeaders(request, env)
+          );
+        }
+        throw error;
+      }
     }
+
     return jsonResponse({ error: "not_found" }, 404, corsHeaders(request, env));
   },
 } satisfies ExportedHandler<Env>;

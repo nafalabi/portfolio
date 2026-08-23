@@ -26,12 +26,12 @@ const fadeInUp = keyframes`
   }
 `;
 
-const shimmer = keyframes`
-  0% {
-    background-position: -200% 0;
+const pulse = keyframes`
+  0%, 100% {
+    opacity: 1;
   }
-  100% {
-    background-position: 200% 0;
+  50% {
+    opacity: 0.42;
   }
 `;
 
@@ -105,9 +105,46 @@ const Root = emotionStyled("div")(({ theme }) => ({
 
   "& .content": {
     marginTop: "2.5rem",
+    marginBottom: "3.5rem",
     width: "100%",
     opacity: 0,
     animation: `${fadeInUp} 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards`,
+  },
+
+  "& .bottom-cta-row": {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "3rem",
+    width: "100%",
+  },
+
+  "& .medium-bottom-btn": {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "0.6rem",
+    padding: "0.8rem 2rem",
+    borderRadius: "2rem",
+    backgroundColor: theme.colors.button.blue,
+    color: theme.colors.buttonText.white,
+    fontSize: "14.5px",
+    fontWeight: 600,
+    textDecoration: "none",
+    boxShadow: "0 4px 14px rgba(21, 12, 108, 0.25)",
+    transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+    border: "none",
+    "&:hover": {
+      transform: "translateY(-2px)",
+      backgroundColor: "#0d074b",
+      boxShadow: "0 8px 24px rgba(21, 12, 108, 0.35)",
+      color: "#ffffff",
+      "& .arrow-cta": {
+        transform: "translate(3px, -3px)",
+      },
+    },
+    "& .arrow-cta": {
+      transition: "transform 0.2s ease",
+    },
   },
 
   "& #footer": {
@@ -127,21 +164,19 @@ const SkeletonRowRoot = emotionStyled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "space-between",
   gap: "1.75rem",
-  padding: "1.5rem 0.5rem",
+  padding: "1.35rem 0.75rem",
   borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
 
   [`@media (max-width: ${theme.breakpoints.md}px)`]: {
     flexDirection: "column",
     alignItems: "stretch",
     gap: "1rem",
-    padding: "1.25rem 0.25rem",
+    padding: "1.25rem 0.5rem",
   },
 
-  "& .shimmer": {
-    background: "linear-gradient(90deg, #e4e2de 25%, #edebe8 50%, #e4e2de 75%)",
-    backgroundSize: "200% 100%",
-    animation: `${shimmer} 1.6s infinite linear`,
-    borderRadius: "6px",
+  "& .skeleton-block": {
+    backgroundColor: "rgba(0, 0, 0, 0.08)",
+    animation: `${pulse} 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite`,
   },
 
   "& .skeleton-meta": {
@@ -149,81 +184,112 @@ const SkeletonRowRoot = emotionStyled("div")(({ theme }) => ({
     flexShrink: 0,
     display: "flex",
     flexDirection: "column",
-    gap: "0.4rem",
+    gap: "0.5rem",
     [`@media (max-width: ${theme.breakpoints.md}px)`]: {
       width: "100%",
       flexDirection: "row",
       justifyContent: "space-between",
+      alignItems: "center",
     },
   },
 
   "& .skeleton-date": {
     width: "90px",
-    height: "16px",
+    height: "15px",
+    borderRadius: "8px",
   },
 
   "& .skeleton-time": {
-    width: "70px",
-    height: "13px",
+    width: "60px",
+    height: "12px",
+    borderRadius: "6px",
   },
 
   "& .skeleton-body": {
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
-    gap: "0.5rem",
     minWidth: 0,
   },
 
   "& .skeleton-title": {
-    width: "85%",
-    height: "20px",
+    width: "80%",
+    height: "18px",
+    borderRadius: "8px",
+    marginBottom: "0.6rem",
   },
 
-  "& .skeleton-preview": {
-    width: "95%",
-    height: "14px",
+  "& .skeleton-snippet-1": {
+    width: "96%",
+    height: "12px",
+    borderRadius: "6px",
+    marginBottom: "0.4rem",
+  },
+
+  "& .skeleton-snippet-2": {
+    width: "55%",
+    height: "12px",
+    borderRadius: "6px",
+    marginBottom: "0.75rem",
   },
 
   "& .skeleton-tags": {
     display: "flex",
-    gap: "0.4rem",
-    marginTop: "0.2rem",
+    gap: "0.45rem",
+    alignItems: "center",
   },
 
   "& .skeleton-tag": {
     width: "55px",
-    height: "18px",
-    borderRadius: "10px",
+    height: "22px",
+    borderRadius: "8px",
   },
 
   "& .skeleton-visual": {
-    width: "120px",
-    height: "80px",
-    borderRadius: "8px",
+    display: "flex",
+    alignItems: "center",
+    gap: "0.75rem",
     flexShrink: 0,
     [`@media (max-width: ${theme.breakpoints.md}px)`]: {
-      display: "none",
+      justifyContent: "space-between",
+      marginTop: "0.25rem",
     },
+  },
+
+  "& .skeleton-thumb": {
+    width: "120px",
+    height: "80px",
+    borderRadius: "10px",
+    flexShrink: 0,
+  },
+
+  "& .skeleton-arrow": {
+    width: "16px",
+    height: "16px",
+    borderRadius: "6px",
   },
 }));
 
 const SkeletonCard = () => (
   <SkeletonRowRoot>
     <div className="skeleton-meta">
-      <div className="skeleton-date shimmer" />
-      <div className="skeleton-time shimmer" />
+      <div className="skeleton-block skeleton-date" />
+      <div className="skeleton-block skeleton-time" />
     </div>
     <div className="skeleton-body">
-      <div className="skeleton-title shimmer" />
-      <div className="skeleton-preview shimmer" />
+      <div className="skeleton-block skeleton-title" />
+      <div className="skeleton-block skeleton-snippet-1" />
+      <div className="skeleton-block skeleton-snippet-2" />
       <div className="skeleton-tags">
-        <div className="skeleton-tag shimmer" />
-        <div className="skeleton-tag shimmer" />
-        <div className="skeleton-tag shimmer" />
+        <div className="skeleton-block skeleton-tag" />
+        <div className="skeleton-block skeleton-tag" />
+        <div className="skeleton-block skeleton-tag" />
       </div>
     </div>
-    <div className="skeleton-visual shimmer" />
+    <div className="skeleton-visual">
+      <div className="skeleton-block skeleton-thumb" />
+      <div className="skeleton-block skeleton-arrow" />
+    </div>
   </SkeletonRowRoot>
 );
 
@@ -355,6 +421,8 @@ const BlogPage = () => {
               <SkeletonCard />
               <SkeletonCard />
               <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
             </PostList>
           )}
 
@@ -402,11 +470,26 @@ const BlogPage = () => {
           )}
 
           {status === "success" && posts.length > 0 && (
-            <PostList>
-              {posts.map((post) => (
-                <BlogPostCard key={post.link} post={post} />
-              ))}
-            </PostList>
+            <>
+              <PostList>
+                {posts.map((post) => (
+                  <BlogPostCard key={post.link} post={post} />
+                ))}
+              </PostList>
+
+              <div className="bottom-cta-row">
+                <a
+                  href={MEDIUM_PROFILE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="medium-bottom-btn"
+                >
+                  <FaMedium size={17} />
+                  <span>Read more stories on Medium</span>
+                  <HiArrowUpRight size={15} className="arrow-cta" />
+                </a>
+              </div>
+            </>
           )}
         </div>
       </Container>

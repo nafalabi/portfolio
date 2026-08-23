@@ -99,22 +99,29 @@ const ScrollHintPill = styled.div<{ visible: boolean }>(({ visible }) => ({
   },
 }));
 
+const checkIsScrollable = () => {
+  if (typeof window === "undefined") return false;
+  return document.documentElement.scrollHeight > window.innerHeight + 100;
+};
+
 const Footer = () => {
   const { pathname } = useLocation();
   const [isAtBottom, setIsAtBottom] = useState(false);
-  const [isScrollable, setIsScrollable] = useState(false);
+  const [isScrollable, setIsScrollable] = useState(checkIsScrollable);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   const targetCompact = isScrollable && !isAtBottom;
-  const [renderedCompact, setRenderedCompact] = useState(globalFooterCompactState);
-  const [disableTransition, setDisableTransition] = useState(false);
+  const [renderedCompact, setRenderedCompact] = useState(() => {
+    return globalFooterCompactState || checkIsScrollable();
+  });
+  const [disableTransition, setDisableTransition] = useState(true);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
 
     const updateScrollable = () => {
-      const scrollable = document.documentElement.scrollHeight > window.innerHeight + 100;
+      const scrollable = checkIsScrollable();
       setIsScrollable(scrollable);
     };
 
@@ -130,10 +137,26 @@ const Footer = () => {
     );
 
     observer.observe(sentinel);
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateScrollable();
+    });
+    if (document.body) {
+      resizeObserver.observe(document.body);
+    }
+
     window.addEventListener("resize", updateScrollable);
 
+    // Briefly disable animation on page mount to prevent flash
+    setDisableTransition(true);
+    const transitionTimer = setTimeout(() => {
+      setDisableTransition(false);
+    }, 150);
+
     return () => {
+      clearTimeout(transitionTimer);
       observer.disconnect();
+      resizeObserver.disconnect();
       window.removeEventListener("resize", updateScrollable);
     };
   }, [pathname]);
@@ -143,12 +166,8 @@ const Footer = () => {
     const nowCompact = targetCompact;
 
     if (wasCompact === nowCompact) {
-      setDisableTransition(true);
       setRenderedCompact(nowCompact);
-      const timer = setTimeout(() => setDisableTransition(false), 50);
-      return () => clearTimeout(timer);
     } else {
-      setDisableTransition(false);
       setRenderedCompact(wasCompact);
       const raf = requestAnimationFrame(() => {
         setRenderedCompact(nowCompact);

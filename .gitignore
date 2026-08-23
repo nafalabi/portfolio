@@ -11,6 +11,14 @@ node_modules
 dist
 dist-ssr
 *.local
+.superpowers
+docs/superpowers
+
+# env & worker artifacts
+.env*
+!.env.example
+worker/.dev.vars
+worker/.wrangler/
 
 # Editor directories and files
 .vscode/*

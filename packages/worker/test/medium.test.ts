@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { parseFeed } from "../src/medium";
+import { BlogService } from "../src/modules/blog/blog.service";
 import { FEED_XML } from "./fixtures";
 
-describe("parseFeed", () => {
+const blogService = new BlogService();
+
+describe("BlogService.parseFeed", () => {
   it("parses items into BlogPost metadata", () => {
-    const posts = parseFeed(FEED_XML);
+    const posts = blogService.parseFeed(FEED_XML);
 
     expect(posts).toHaveLength(2); // title-less third item is skipped
 
@@ -22,15 +24,15 @@ describe("parseFeed", () => {
   });
 
   it("handles a post without a cover image and decodes entities", () => {
-    const [, second] = parseFeed(FEED_XML);
+    const [, second] = blogService.parseFeed(FEED_XML);
     expect(second.coverImage).toBeNull();
     expect(second.tags).toEqual(["go"]);
     expect(second.preview).toBe("A short one about Go & tooling.");
   });
 
   it("returns empty array for malformed or empty feeds", () => {
-    expect(parseFeed("this is not xml")).toEqual([]);
-    expect(parseFeed("<rss><channel></channel></rss>")).toEqual([]);
+    expect(blogService.parseFeed("this is not xml")).toEqual([]);
+    expect(blogService.parseFeed("<rss><channel></channel></rss>")).toEqual([]);
   });
 
   it("caps results at 10 posts", () => {
@@ -40,17 +42,17 @@ describe("parseFeed", () => {
         `<item><title>P ${i}</title><link>https://medium.com/p/${i}</link><content:encoded><![CDATA[<p>x</p>]]></content:encoded></item>`
     ).join("");
     const xml = `<rss><channel>${manyItems}</channel></rss>`;
-    expect(parseFeed(xml)).toHaveLength(10);
+    expect(blogService.parseFeed(xml)).toHaveLength(10);
   });
 
   it("estimates reading minutes from word count", () => {
     const words = Array.from({ length: 401 }, () => "word").join(" ");
     const xml = `<rss><channel><item><title>Long</title><link>https://medium.com/long</link><content:encoded><![CDATA[<p>${words}</p>]]></content:encoded></item></channel></rss>`;
-    expect(parseFeed(xml)[0].readingMinutes).toBe(3); // ceil(401/200)
+    expect(blogService.parseFeed(xml)[0].readingMinutes).toBe(3); // ceil(401/200)
   });
 
   it("never returns fewer than 1 reading minute", () => {
-    expect(parseFeed(FEED_XML)[1].readingMinutes).toBeGreaterThanOrEqual(1);
+    expect(blogService.parseFeed(FEED_XML)[1].readingMinutes).toBeGreaterThanOrEqual(1);
   });
 
   it("truncates preview to 200 characters", () => {
@@ -59,6 +61,6 @@ describe("parseFeed", () => {
       () => "loremipsumdolor"
     ).join(" ");
     const xml = `<rss><channel><item><title>T</title><link>https://medium.com/t</link><content:encoded><![CDATA[<p>${longText}</p>]]></content:encoded></item></channel></rss>`;
-    expect(parseFeed(xml)[0].preview.length).toBeLessThanOrEqual(200);
+    expect(blogService.parseFeed(xml)[0].preview.length).toBeLessThanOrEqual(200);
   });
 });

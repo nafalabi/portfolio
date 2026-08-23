@@ -1,6 +1,6 @@
 import { SELF, fetchMock } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { CACHE_KEY } from "../src/medium";
+import { BLOG_CONSTANTS } from "../src/modules/blog/blog.types";
 import { FEED_XML } from "./fixtures";
 
 const FEED_ORIGIN = "https://medium.com";
@@ -13,7 +13,7 @@ function mockFeed(status: number, body: string) {
 beforeEach(async () => {
   fetchMock.activate();
   fetchMock.disableNetConnect();
-  await caches.default.delete(new Request(CACHE_KEY));
+  await caches.default.delete(new Request(BLOG_CONSTANTS.CACHE_KEY));
 });
 
 afterEach(() => {
@@ -38,6 +38,15 @@ describe("GET /posts", () => {
       headers: { Origin: "https://evil.example" },
     });
     expect(res.headers.get("access-control-allow-origin")).toBeNull();
+  });
+});
+
+describe("GET /health", () => {
+  it("returns healthy status", async () => {
+    const res = await SELF.fetch("https://example.com/health");
+    expect(res.status).toBe(200);
+    const body = (await res.json()) as { status: string };
+    expect(body.status).toBe("healthy");
   });
 });
 
@@ -88,7 +97,7 @@ describe("GET /posts (cache)", () => {
       ((await first.json()) as { posts: unknown[] }).posts
     ).toHaveLength(2);
 
-    const stored = await caches.default.match(new Request(CACHE_KEY));
+    const stored = await caches.default.match(new Request(BLOG_CONSTANTS.CACHE_KEY));
     expect(stored).toBeDefined();
     expect(stored?.headers.get("cache-control")).toBe("public, max-age=3600");
     expect(Number(stored?.headers.get("x-stored-at"))).toBeGreaterThan(0);
@@ -103,7 +112,7 @@ describe("GET /posts (cache)", () => {
   it("serves stale content immediately and refreshes in the background", async () => {
     const staleSecondsAgo = Math.floor(Date.now() / 1000) - 7200;
     await caches.default.put(
-      new Request(CACHE_KEY),
+      new Request(BLOG_CONSTANTS.CACHE_KEY),
       new Response(JSON.stringify({ posts: [{ title: "stale post" }] }), {
         headers: {
           "content-type": "application/json",
@@ -128,7 +137,7 @@ describe("GET /posts (cache)", () => {
   it("keeps serving stale content when upstream fails during refresh", async () => {
     const staleSecondsAgo = Math.floor(Date.now() / 1000) - 7200;
     await caches.default.put(
-      new Request(CACHE_KEY),
+      new Request(BLOG_CONSTANTS.CACHE_KEY),
       new Response(JSON.stringify({ posts: [{ title: "stale survivor" }] }), {
         headers: {
           "content-type": "application/json",

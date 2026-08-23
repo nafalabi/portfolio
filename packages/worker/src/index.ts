@@ -1,102 +1,47 @@
-import {
-  CACHE_KEY,
-  CACHE_TTL_SECONDS,
-  fetchPosts,
-  UpstreamError,
-} from "./medium";
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { AppContext, Env } from "./core/env";
+import { AppError } from "./core/errors";
+import { blogController } from "./modules/blog/blog.controller";
+import { healthController } from "./modules/health/health.controller";
 
-export interface Env {
-  CORS_ALLOWED_ORIGINS: string;
-}
+export type { Env };
 
-export default {
-  async fetch(request, env, ctx): Promise<Response> {
-    const url = new URL(request.url);
+const app = new Hono<AppContext>();
 
-    if (url.pathname === "/posts") {
-      return servePosts(request, env, ctx);
-    }
+// Global CORS Middleware
+app.use("*", async (c, next) => {
+  const allowedOrigins = (c.env?.CORS_ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
 
-    return jsonResponse({ error: "not_found" }, 404, corsHeaders(request, env));
-  },
-} satisfies ExportedHandler<Env>;
-
-async function servePosts(
-  request: Request,
-  env: Env,
-  ctx: ExecutionContext
-): Promise<Response> {
-  const cache = caches.default;
-  const cacheKey = new Request(CACHE_KEY);
-
-  const cached = await cache.match(cacheKey);
-  if (cached) {
-    const storedAt = Number(cached.headers.get("x-stored-at") ?? "0");
-    const age = Math.floor(Date.now() / 1000) - storedAt;
-    if (age >= CACHE_TTL_SECONDS) {
-      ctx.waitUntil(refreshCache(cacheKey, cache, env));
-    }
-    return jsonResponse(await cached.json(), 200, corsHeaders(request, env));
-  }
-
-  const refreshed = await refreshCache(cacheKey, cache, env);
-  if (!refreshed.ok) {
-    return jsonResponse(
-      { error: "upstream_unavailable" },
-      502,
-      corsHeaders(request, env)
-    );
-  }
-  return jsonResponse(
-    await refreshed.response.json(),
-    200,
-    corsHeaders(request, env)
-  );
-}
-
-async function refreshCache(
-  cacheKey: Request,
-  cache: Cache,
-  env: Env
-): Promise<{ ok: true; response: Response } | { ok: false }> {
-  void env;
-  try {
-    const posts = await fetchPosts();
-    const response = new Response(JSON.stringify({ posts }), {
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": `public, max-age=${CACHE_TTL_SECONDS}`,
-        "x-stored-at": String(Math.floor(Date.now() / 1000)),
-      },
-    });
-    await cache.put(cacheKey, response.clone());
-    return { ok: true, response };
-  } catch (error) {
-    if (error instanceof UpstreamError) {
-      console.error(error.message);
-    } else {
-      console.error("unexpected refresh failure", error);
-    }
-    return { ok: false };
-  }
-}
-
-function corsHeaders(request: Request, env: Env): Record<string, string> {
-  const origin = request.headers.get("Origin");
-  const allowed = env.CORS_ALLOWED_ORIGINS.split(",").map((o) => o.trim());
-  if (origin && allowed.includes(origin)) {
-    return { "Access-Control-Allow-Origin": origin };
-  }
-  return {};
-}
-
-function jsonResponse(
-  body: unknown,
-  status: number,
-  headers: Record<string, string>
-): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "Content-Type": "application/json", ...headers },
+  const corsHandler = cors({
+    origin: (origin) => {
+      return allowedOrigins.includes(origin) ? origin : null;
+    },
+    allowMethods: ["GET", "OPTIONS"],
   });
-}
+
+  return corsHandler(c, next);
+});
+
+// Feature Routes
+app.route("/posts", blogController);
+app.route("/health", healthController);
+
+// Not Found Handler
+app.notFound((c) => {
+  return c.json({ error: "not_found" }, 404);
+});
+
+// Global Error Handler
+app.onError((err, c) => {
+  if (err instanceof AppError) {
+    return c.json({ error: err.code || "error" }, err.statusCode as any);
+  }
+  console.error("Unhandled worker error:", err);
+  return c.json({ error: "internal_error" }, 500);
+});
+
+export default app;

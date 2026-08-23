@@ -4,7 +4,12 @@
   "scripts": {
     "dev:web": "yarn workspace web dev",
     "build:web": "yarn workspace web build",
+    "preview:web": "yarn workspace web preview",
     "lint": "yarn workspaces run lint",
-    "test:worker": "yarn workspace portfolio-api test"
+    "lint:web": "yarn workspace web lint",
+    "lint:worker": "yarn workspace worker lint",
+    "dev:worker": "yarn workspace worker dev",
+    "test:worker": "yarn workspace worker test",
+    "deploy:worker": "yarn workspace worker deploy"
   }
 }

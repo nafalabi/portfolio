@@ -2,10 +2,14 @@ import { UpstreamError } from "../../core/errors";
 import { BLOG_CONSTANTS } from "./blog.types";
 
 export class MediumClient {
+  private fetcher: typeof fetch;
+
   constructor(
     private feedUrl: string = BLOG_CONSTANTS.FEED_URL,
-    private fetcher: typeof fetch = fetch
-  ) {}
+    fetcher: typeof fetch = fetch
+  ) {
+    this.fetcher = (input, init) => fetcher(input, init);
+  }
 
   async fetchRawFeed(): Promise<string> {
     let response: Response;

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { BlogService } from "../src/modules/blog/blog.service";
+import { MediumClient } from "../src/modules/blog/blog.client";
 import { FEED_XML } from "./fixtures";
 
 const blogService = new BlogService();
@@ -64,3 +65,23 @@ describe("BlogService.parseFeed", () => {
     expect(blogService.parseFeed(xml)[0].preview.length).toBeLessThanOrEqual(200);
   });
 });
+
+describe("MediumClient.fetchRawFeed", () => {
+  it("fetches raw feed using global fetch without illegal invocation", async () => {
+    const client = new MediumClient("https://example.com/feed", async function (
+      this: unknown,
+      _input: RequestInfo | URL,
+      _init?: RequestInit
+    ) {
+      // If invoked with MediumClient instance as `this`, this assertion would fail
+      expect(this).not.toBeInstanceOf(MediumClient);
+      return new Response("<rss><channel><item><title>Test</title></item></channel></rss>", {
+        status: 200,
+      });
+    });
+
+    const feed = await client.fetchRawFeed();
+    expect(feed).toContain("<rss>");
+  });
+});
+

@@ -118,23 +118,23 @@ const Root = emotionStyled("div")(({ theme }) => ({
 const PostList = emotionStyled("div")({
   display: "flex",
   flexDirection: "column",
-  gap: "1.25rem",
+  width: "100%",
 });
 
-const SkeletonCardRoot = emotionStyled("div")(({ theme }) => ({
+const SkeletonRowRoot = emotionStyled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
-  alignItems: "stretch",
-  gap: "1.5rem",
-  padding: "1.25rem 1.5rem",
-  backgroundColor: "#f2f0ee",
-  borderRadius: "16px",
-  border: "1px solid rgba(0, 0, 0, 0.08)",
-  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: "1.75rem",
+  padding: "1.5rem 0.5rem",
+  borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
 
   [`@media (max-width: ${theme.breakpoints.md}px)`]: {
     flexDirection: "column",
-    padding: "1.25rem",
+    alignItems: "stretch",
+    gap: "1rem",
+    padding: "1.25rem 0.25rem",
   },
 
   "& .shimmer": {
@@ -144,82 +144,87 @@ const SkeletonCardRoot = emotionStyled("div")(({ theme }) => ({
     borderRadius: "6px",
   },
 
-  "& .skeleton-image": {
-    width: "200px",
-    height: "135px",
-    borderRadius: "12px",
+  "& .skeleton-meta": {
+    width: "120px",
     flexShrink: 0,
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.4rem",
     [`@media (max-width: ${theme.breakpoints.md}px)`]: {
       width: "100%",
-      height: "180px",
+      flexDirection: "row",
+      justifyContent: "space-between",
     },
+  },
+
+  "& .skeleton-date": {
+    width: "90px",
+    height: "16px",
+  },
+
+  "& .skeleton-time": {
+    width: "70px",
+    height: "13px",
   },
 
   "& .skeleton-body": {
     flexGrow: 1,
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between",
-    gap: "0.75rem",
+    gap: "0.5rem",
+    minWidth: 0,
   },
 
-  "& .skeleton-meta": {
-    width: "180px",
-    height: "18px",
-    borderRadius: "10px",
-  },
-
-  "& .skeleton-title-1": {
+  "& .skeleton-title": {
     width: "85%",
-    height: "22px",
-    borderRadius: "6px",
-    marginTop: "0.2rem",
-  },
-
-  "& .skeleton-title-2": {
-    width: "55%",
-    height: "22px",
-    borderRadius: "6px",
-    marginTop: "0.3rem",
+    height: "20px",
   },
 
   "& .skeleton-preview": {
     width: "95%",
     height: "14px",
-    borderRadius: "4px",
-    marginTop: "0.4rem",
   },
 
   "& .skeleton-tags": {
     display: "flex",
-    gap: "0.5rem",
-    marginTop: "0.5rem",
+    gap: "0.4rem",
+    marginTop: "0.2rem",
   },
 
   "& .skeleton-tag": {
-    width: "65px",
-    height: "22px",
-    borderRadius: "14px",
+    width: "55px",
+    height: "18px",
+    borderRadius: "10px",
+  },
+
+  "& .skeleton-visual": {
+    width: "120px",
+    height: "80px",
+    borderRadius: "8px",
+    flexShrink: 0,
+    [`@media (max-width: ${theme.breakpoints.md}px)`]: {
+      display: "none",
+    },
   },
 }));
 
 const SkeletonCard = () => (
-  <SkeletonCardRoot>
-    <div className="skeleton-image shimmer" />
+  <SkeletonRowRoot>
+    <div className="skeleton-meta">
+      <div className="skeleton-date shimmer" />
+      <div className="skeleton-time shimmer" />
+    </div>
     <div className="skeleton-body">
-      <div>
-        <div className="skeleton-meta shimmer" />
-        <div className="skeleton-title-1 shimmer" />
-        <div className="skeleton-title-2 shimmer" />
-        <div className="skeleton-preview shimmer" />
-      </div>
+      <div className="skeleton-title shimmer" />
+      <div className="skeleton-preview shimmer" />
       <div className="skeleton-tags">
         <div className="skeleton-tag shimmer" />
         <div className="skeleton-tag shimmer" />
         <div className="skeleton-tag shimmer" />
       </div>
     </div>
-  </SkeletonCardRoot>
+    <div className="skeleton-visual shimmer" />
+  </SkeletonRowRoot>
 );
 
 const NoticeCard = emotionStyled("div")(({ theme }) => ({

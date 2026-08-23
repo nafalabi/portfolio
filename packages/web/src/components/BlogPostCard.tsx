@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
-import { FaRegCalendarAlt, FaRegClock } from "react-icons/fa";
-import { FaMedium } from "react-icons/fa6";
+import { FaRegClock } from "react-icons/fa";
 import { MdOutlineArticle } from "react-icons/md";
 import { HiArrowUpRight } from "react-icons/hi2";
 import { CommonComponentProps } from "@/components/types";
@@ -30,63 +29,149 @@ const cleanPreviewText = (text: string) => {
     .trim();
 };
 
-const CardRoot = styled.a(({ theme }) => ({
+const RowRoot = styled.a(({ theme }) => ({
   display: "flex",
   flexDirection: "row",
-  alignItems: "stretch",
-  gap: "1.5rem",
-  padding: "1.25rem 1.5rem",
-  backgroundColor: "#f2f0ee",
-  borderRadius: "16px",
-  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02)",
-  border: "1px solid rgba(0, 0, 0, 0.08)",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: "1.75rem",
+  padding: "1.35rem 0.75rem",
+  borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
   color: theme.colors.text,
   textDecoration: "none",
-  transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
-  position: "relative",
-  overflow: "hidden",
+  transition: "background-color 0.2s ease, border-color 0.2s ease",
+  borderRadius: "10px",
+
+  "&:hover": {
+    backgroundColor: "rgba(0, 0, 0, 0.035)",
+
+    "& .thumb-img": {
+      transform: "scale(1.05)",
+    },
+
+    "& .arrow-icon": {
+      transform: "translate(2px, -2px)",
+      color: theme.colors.button.blue,
+    },
+  },
 
   [`@media (max-width: ${theme.breakpoints.md}px)`]: {
     flexDirection: "column",
-    gap: "1.1rem",
-    padding: "1.25rem",
+    alignItems: "stretch",
+    gap: "1rem",
+    padding: "1.25rem 0.5rem",
   },
 
-  "&:hover": {
-    transform: "translateY(-3px)",
-    boxShadow: "0 12px 32px rgba(0, 0, 0, 0.07), 0 2px 6px rgba(0, 0, 0, 0.03)",
-    borderColor: "rgba(0, 0, 0, 0.14)",
-
-    "& .card-title": {
-      color: theme.colors.button.blue,
-    },
-
-    "& .cover-img": {
-      transform: "scale(1.04)",
-    },
-
-    "& .read-more-arrow": {
-      transform: "translate(2px, -2px)",
-    },
-  },
-
-  "& .cover-wrapper": {
-    width: "200px",
-    height: "135px",
-    borderRadius: "12px",
-    overflow: "hidden",
+  "& .meta-col": {
+    width: "120px",
     flexShrink: 0,
-    backgroundColor: "#e8e6e3",
-    border: "1px solid rgba(0, 0, 0, 0.06)",
-    position: "relative",
-
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.25rem",
     [`@media (max-width: ${theme.breakpoints.md}px)`]: {
       width: "100%",
-      height: "180px",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
     },
   },
 
-  "& .cover-img": {
+  "& .date-text": {
+    fontSize: "14px",
+    fontWeight: 700,
+    color: theme.colors.text,
+    whiteSpace: "nowrap",
+  },
+
+  "& .read-time": {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "0.3rem",
+    fontSize: "12px",
+    fontWeight: 500,
+    color: "#666666",
+  },
+
+  "& .body-col": {
+    flexGrow: 1,
+    minWidth: 0,
+    display: "flex",
+    flexDirection: "column",
+  },
+
+  "& .article-title": {
+    fontSize: "18.5px",
+    fontWeight: 700,
+    lineHeight: 1.35,
+    color: theme.colors.text,
+    margin: "0 0 0.35rem 0",
+  },
+
+  "& .preview-snippet": {
+    fontSize: "14px",
+    lineHeight: 1.55,
+    color: "#4a4a4a",
+    margin: "0 0 0.65rem 0",
+    display: "-webkit-box",
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: "vertical",
+    overflow: "hidden",
+  },
+
+  "& .tags-row": {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "0.45rem",
+    alignItems: "center",
+  },
+
+  "& .tag-chip": {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "0.15rem",
+    fontSize: "11.5px",
+    fontWeight: 600,
+    color: "#2b3e50",
+    backgroundColor: "rgba(0, 0, 0, 0.05)",
+    border: "1px solid rgba(0, 0, 0, 0.07)",
+    padding: "0.2rem 0.6rem",
+    borderRadius: "6px",
+    letterSpacing: "0.2px",
+    transition: "all 0.15s ease",
+    "& .tag-hash": {
+      opacity: 0.45,
+      fontWeight: 500,
+    },
+    "&:hover": {
+      backgroundColor: "#ffffff",
+      borderColor: "rgba(0, 0, 0, 0.15)",
+      color: theme.colors.button.blue,
+    },
+  },
+
+  "& .visual-col": {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.75rem",
+    flexShrink: 0,
+    [`@media (max-width: ${theme.breakpoints.md}px)`]: {
+      justifyContent: "space-between",
+      marginTop: "0.25rem",
+    },
+  },
+
+  "& .thumb-container": {
+    width: "120px",
+    height: "80px",
+    borderRadius: "8px",
+    overflow: "hidden",
+    backgroundColor: "#d5d3d0",
+    border: "1px solid rgba(0, 0, 0, 0.08)",
+    position: "relative",
+    flexShrink: 0,
+  },
+
+  "& .thumb-img": {
     width: "100%",
     height: "100%",
     objectFit: "cover",
@@ -94,127 +179,19 @@ const CardRoot = styled.a(({ theme }) => ({
     transition: "transform 0.35s ease",
   },
 
-  "& .cover-placeholder": {
+  "& .thumb-placeholder": {
     width: "100%",
     height: "100%",
     display: "flex",
-    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    gap: "0.5rem",
     background: `linear-gradient(135deg, ${theme.colors.button.blue} 0%, #2b3e50 100%)`,
     color: "#ffffff",
   },
 
-  "& .body-content": {
-    minWidth: 0,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    gap: "0.5rem",
-    flexGrow: 1,
-  },
-
-  "& .meta-row": {
-    display: "flex",
-    alignItems: "center",
-    flexWrap: "wrap",
-    gap: "0.6rem",
-    fontSize: "12.5px",
-    color: "#555555",
-    fontWeight: 500,
-  },
-
-  "& .meta-badge": {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "0.35rem",
-    backgroundColor: "rgba(0, 0, 0, 0.05)",
-    padding: "0.2rem 0.65rem",
-    borderRadius: "14px",
-    border: "1px solid rgba(0, 0, 0, 0.06)",
-    fontSize: "12px",
-    fontWeight: 600,
-    color: "#444444",
-  },
-
-  "& .medium-pill": {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "0.3rem",
-    backgroundColor: "#ffffff",
-    padding: "0.2rem 0.65rem",
-    borderRadius: "14px",
-    border: "1px solid rgba(0, 0, 0, 0.08)",
-    fontSize: "11.5px",
-    fontWeight: 600,
-    color: "#222222",
-  },
-
-  "& .card-title": {
-    fontSize: "19px",
-    fontWeight: 700,
-    lineHeight: 1.35,
-    color: theme.colors.text,
-    transition: "color 0.2s ease",
-    margin: "0.15rem 0",
-    display: "-webkit-box",
-    WebkitLineClamp: 2,
-    WebkitBoxOrient: "vertical",
-    overflow: "hidden",
-  },
-
-  "& .preview-text": {
-    fontSize: "14px",
-    lineHeight: 1.55,
-    color: "#4a4a4a",
-    display: "-webkit-box",
-    WebkitLineClamp: 2,
-    WebkitBoxOrient: "vertical",
-    overflow: "hidden",
-  },
-
-  "& .footer-row": {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-    gap: "0.6rem",
-    marginTop: "0.35rem",
-    paddingTop: "0.35rem",
-  },
-
-  "& .tags-list": {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "0.4rem",
-    alignItems: "center",
-  },
-
-  "& .tag-chip": {
-    fontSize: "11.5px",
-    fontWeight: 600,
-    color: "#2b3e50",
-    backgroundColor: "#ffffff",
-    border: "1px solid rgba(0, 0, 0, 0.08)",
-    padding: "0.2rem 0.65rem",
-    borderRadius: "14px",
+  "& .arrow-icon": {
+    color: "#888888",
     transition: "all 0.2s ease",
-  },
-
-  "& .read-link": {
-    display: "inline-flex",
-    alignItems: "center",
-    gap: "0.3rem",
-    fontSize: "13px",
-    fontWeight: 600,
-    color: theme.colors.button.blue,
-    marginLeft: "auto",
-    whiteSpace: "nowrap",
-  },
-
-  "& .read-more-arrow": {
-    transition: "transform 0.2s ease",
   },
 }));
 
@@ -222,72 +199,56 @@ const BlogPostCard = ({ post, ...props }: BlogPostCardProps) => {
   const cleanedPreview = cleanPreviewText(post.preview);
 
   return (
-    <CardRoot
+    <RowRoot
       href={post.link}
       target="_blank"
       rel="noopener noreferrer"
       {...props}
     >
-      <div className="cover-wrapper">
-        {post.coverImage ? (
-          <img
-            className="cover-img"
-            src={post.coverImage}
-            alt={post.title}
-            loading="lazy"
-          />
-        ) : (
-          <div className="cover-placeholder">
-            <MdOutlineArticle size={36} />
-            <span style={{ fontSize: "11px", fontWeight: 600, opacity: 0.9 }}>
-              Article
-            </span>
-          </div>
-        )}
+      <div className="meta-col">
+        <div className="date-text">{formatDate(post.publishedAt)}</div>
+        <div className="read-time">
+          <FaRegClock size={11} />
+          <span>{post.readingMinutes} min read</span>
+        </div>
       </div>
 
-      <div className="body-content">
-        <div>
-          <div className="meta-row">
-            <span className="medium-pill">
-              <FaMedium size={13} />
-              Medium
+      <div className="body-col">
+        <h3 className="article-title">{post.title}</h3>
+        {cleanedPreview && (
+          <p className="preview-snippet">{cleanedPreview}</p>
+        )}
+        <div className="tags-row">
+          {post.tags.slice(0, 4).map((tag) => (
+            <span key={tag} className="tag-chip">
+              <span className="tag-hash">#</span>
+              {tag}
             </span>
-            <span className="meta-badge">
-              <FaRegCalendarAlt size={11} />
-              {formatDate(post.publishedAt)}
-            </span>
-            <span className="meta-badge">
-              <FaRegClock size={11} />
-              {post.readingMinutes} min read
-            </span>
-          </div>
+          ))}
+        </div>
+      </div>
 
-          <h3 className="card-title">{post.title}</h3>
-
-          {cleanedPreview && (
-            <p className="preview-text">{cleanedPreview}</p>
+      <div className="visual-col">
+        <div className="thumb-container">
+          {post.coverImage ? (
+            <img
+              className="thumb-img"
+              src={post.coverImage}
+              alt={post.title}
+              loading="lazy"
+            />
+          ) : (
+            <div className="thumb-placeholder">
+              <MdOutlineArticle size={24} />
+            </div>
           )}
         </div>
-
-        <div className="footer-row">
-          <div className="tags-list">
-            {post.tags.slice(0, 4).map((tag) => (
-              <span key={tag} className="tag-chip">
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <span className="read-link">
-            Read article
-            <HiArrowUpRight size={14} className="read-more-arrow" />
-          </span>
-        </div>
+        <HiArrowUpRight size={18} className="arrow-icon" />
       </div>
-    </CardRoot>
+    </RowRoot>
   );
 };
 
 export default BlogPostCard;
+
 

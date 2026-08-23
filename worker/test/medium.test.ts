@@ -1,0 +1,64 @@
+import { describe, expect, it } from "vitest";
+import { parseFeed } from "../src/medium";
+import { FEED_XML } from "./fixtures";
+
+describe("parseFeed", () => {
+  it("parses items into BlogPost metadata", () => {
+    const posts = parseFeed(FEED_XML);
+
+    expect(posts).toHaveLength(2); // title-less third item is skipped
+
+    const [first] = posts;
+    expect(first.title).toBe("TypeScript Tips From Real Projects");
+    expect(first.link).toBe(
+      "https://medium.com/@nandaabifahmi/typescript-tips-from-real-projects-abc123"
+    );
+    expect(first.publishedAt).toBe("2026-08-03T10:00:00.000Z");
+    expect(first.tags).toEqual(["typescript", "web-development"]);
+    expect(first.coverImage).toBe(
+      "https://cdn-images-1.medium.com/v2/cover.png"
+    );
+    expect(first.preview).toContain("TypeScript helps teams");
+  });
+
+  it("handles a post without a cover image and decodes entities", () => {
+    const [, second] = parseFeed(FEED_XML);
+    expect(second.coverImage).toBeNull();
+    expect(second.tags).toEqual(["go"]);
+    expect(second.preview).toBe("A short one about Go & tooling.");
+  });
+
+  it("returns empty array for malformed or empty feeds", () => {
+    expect(parseFeed("this is not xml")).toEqual([]);
+    expect(parseFeed("<rss><channel></channel></rss>")).toEqual([]);
+  });
+
+  it("caps results at 10 posts", () => {
+    const manyItems = Array.from(
+      { length: 14 },
+      (_, i) =>
+        `<item><title>P ${i}</title><link>https://medium.com/p/${i}</link><content:encoded><![CDATA[<p>x</p>]]></content:encoded></item>`
+    ).join("");
+    const xml = `<rss><channel>${manyItems}</channel></rss>`;
+    expect(parseFeed(xml)).toHaveLength(10);
+  });
+
+  it("estimates reading minutes from word count", () => {
+    const words = Array.from({ length: 401 }, () => "word").join(" ");
+    const xml = `<rss><channel><item><title>Long</title><link>https://medium.com/long</link><content:encoded><![CDATA[<p>${words}</p>]]></content:encoded></item></channel></rss>`;
+    expect(parseFeed(xml)[0].readingMinutes).toBe(3); // ceil(401/200)
+  });
+
+  it("never returns fewer than 1 reading minute", () => {
+    expect(parseFeed(FEED_XML)[1].readingMinutes).toBeGreaterThanOrEqual(1);
+  });
+
+  it("truncates preview to 200 characters", () => {
+    const longText = Array.from(
+      { length: 80 },
+      () => "loremipsumdolor"
+    ).join(" ");
+    const xml = `<rss><channel><item><title>T</title><link>https://medium.com/t</link><content:encoded><![CDATA[<p>${longText}</p>]]></content:encoded></item></channel></rss>`;
+    expect(parseFeed(xml)[0].preview.length).toBeLessThanOrEqual(200);
+  });
+});

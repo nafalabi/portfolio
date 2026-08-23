@@ -28,6 +28,7 @@ import AboutMePage from "./pages/about-me.tsx";
 import ProjectsPage from "./pages/projects.tsx";
 import ContactPage from "./pages/contact.tsx";
 import ExperiencePage from "./pages/experience.tsx";
+import BlogPage from "./pages/blog.tsx";
 import SnakePage from "./pages/snake.tsx";
 import Error404 from "./pages/404.tsx";
 
@@ -65,6 +66,7 @@ export const routes = [
       { path: "about-me", element: <AboutMePage /> },
       { path: "projects", element: <ProjectsPage /> },
       { path: "experience", element: <ExperiencePage /> },
+      { path: "blog", element: <BlogPage /> },
       { path: "contact", element: <ContactPage /> },
       { path: "snake", element: <SnakePage /> },
       { path: "*", element: <Error404 /> },

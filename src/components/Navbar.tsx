@@ -101,7 +101,7 @@ interface NavigationItem {
 
 const items: NavigationItem[] = [
   { name: "About me", link: "/about-me", icon: <MdPersonOutline size={20} /> },
-  { name: "Blog", link: "https://medium.com/@nandaabifahmi", isExternal: true, icon: <MdOutlineArticle size={20} /> },
+  { name: "Blog", link: "/blog", icon: <MdOutlineArticle size={20} /> },
   { name: "Contact", link: "/contact", icon: <MdPhone size={20} /> },
 ];
 

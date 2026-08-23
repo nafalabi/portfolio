@@ -91,6 +91,8 @@ function countWords(text: string): number {
 }
 
 export const FEED_URL = "https://medium.com/feed/@nandaabifahmi";
+export const CACHE_KEY = "https://cache.internal/posts";
+export const CACHE_TTL_SECONDS = 3600;
 
 export class UpstreamError extends Error {}
 

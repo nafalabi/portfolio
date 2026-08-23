@@ -1,11 +1,13 @@
-import { fetchPosts, UpstreamError } from "./medium";
+import {
+  CACHE_KEY,
+  CACHE_TTL_SECONDS,
+  fetchPosts,
+  UpstreamError,
+} from "./medium";
 
 export interface Env {
   CORS_ALLOWED_ORIGINS: string;
 }
-
-export const CACHE_KEY = "https://cache.internal/posts";
-export const CACHE_TTL_SECONDS = 3600;
 
 export default {
   async fetch(request, env, ctx): Promise<Response> {

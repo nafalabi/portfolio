@@ -1,6 +1,6 @@
 import { SELF, fetchMock } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { CACHE_KEY } from "../src/index";
+import { CACHE_KEY } from "../src/medium";
 import { FEED_XML } from "./fixtures";
 
 const FEED_ORIGIN = "https://medium.com";

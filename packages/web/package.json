@@ -1,0 +1,45 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite-react-ssg dev",
+    "build": "tsc -b && vite-react-ssg build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "deploy": "yarn build && yarn optimize && yarn deploy-files",
+    "deploy-files": "gh-pages -d dist -r https://github.com/nafalabi/nafalabi.github.io -b main",
+    "optimize": "node ./script/optimize-image.js",
+    "tag": "./script/create-tag.sh",
+    "release-tag": "./script/create-tag.sh --push"
+  },
+  "dependencies": {
+    "@emotion/css": "^11.13.5",
+    "@emotion/react": "^11.11.4",
+    "@emotion/server": "^11.11.0",
+    "@emotion/styled": "^11.11.5",
+    "@fontsource/montserrat": "^5.0.18",
+    "@types/node": "^20.14.10",
+    "polished": "^4.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.2.1",
+    "react-router-dom": "^6.24.1"
+  },
+  "devDependencies": {
+    "@swc/plugin-emotion": "^3.0.9",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.1",
+    "@typescript-eslint/parser": "^7.13.1",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "sharp": "0.33.4",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1",
+    "vite-react-ssg": "^0.9.1-beta.1"
+  }
+}

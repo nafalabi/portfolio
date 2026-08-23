@@ -11,7 +11,7 @@ export interface ButtonProps {
 
 const Button = styled.button<ButtonProps>(({ theme, color, variant = "filled" }) => {
   let backgroundColor = theme.colors.button.blue;
-  let textColor = theme.colors.buttonText.white;
+  const textColor = theme.colors.buttonText.white;
 
   switch (color) {
     case "blue":

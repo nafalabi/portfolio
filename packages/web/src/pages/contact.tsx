@@ -1,5 +1,4 @@
 import Container from "@/components/Container";
-import Box from "@/components/Box";
 import DownloadCvButton from "@/components/DownloadCvButton";
 import Navbar from "@/components/Navbar";
 import Typography from "@/components/Typography";
@@ -12,6 +11,7 @@ import {
   FaLinkedin,
   FaPhoneSquareAlt,
 } from "react-icons/fa";
+import { MdOutlineDescription } from "react-icons/md";
 
 const fadeInUp = keyframes`
   from {
@@ -51,6 +51,53 @@ const CONTACT_CHANNELS = [
   },
 ];
 
+const CvBanner = emotionStyled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: "1.25rem",
+  backgroundColor: "#f2f0ee",
+  padding: "1.25rem 1.75rem",
+  borderRadius: "16px",
+  border: "1px solid rgba(0, 0, 0, 0.08)",
+  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
+  marginBottom: "2rem",
+  flexWrap: "wrap",
+  [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+    flexDirection: "column",
+    alignItems: "stretch",
+    padding: "1.25rem",
+  },
+  "& .banner-left": {
+    display: "flex",
+    alignItems: "center",
+    gap: "1rem",
+  },
+  "& .banner-icon": {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "48px",
+    height: "48px",
+    borderRadius: "12px",
+    backgroundColor: "#ffffff",
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
+    color: theme.colors.button.blue,
+    flexShrink: 0,
+  },
+  "& .banner-title": {
+    fontSize: "15px",
+    fontWeight: 700,
+    color: "#111111",
+    margin: 0,
+  },
+  "& .banner-subtitle": {
+    fontSize: "13px",
+    color: "#666666",
+    margin: "0.2rem 0 0 0",
+  },
+}));
+
 const Root = emotionStyled("div")(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -80,7 +127,7 @@ const Root = emotionStyled("div")(({ theme }) => ({
     fontSize: "16px",
     lineHeight: 1.55,
     color: "#333333",
-    marginBottom: "2.5rem",
+    marginBottom: "2rem",
     maxWidth: "680px",
   },
 
@@ -173,12 +220,23 @@ const ContactPage = () => {
         </div>
         <div className="content">
           <p className="lead-intro">
-            If you're working on interesting challenges or want to talk about anything, feel free to reach out!
+            If you&apos;re working on interesting challenges or want to talk about anything, feel free to reach out!
           </p>
 
-          <Box css={{ marginBottom: "2.5rem" }}>
-            <DownloadCvButton color="red" variant="outlined" />
-          </Box>
+          <CvBanner>
+            <div className="banner-left">
+              <div className="banner-icon">
+                <MdOutlineDescription size={26} />
+              </div>
+              <div>
+                <h4 className="banner-title">Download CV / Resume</h4>
+                <p className="banner-subtitle">
+                  Looking for a detailed summary of my experience?
+                </p>
+              </div>
+            </div>
+            <DownloadCvButton color="blue" variant="filled" />
+          </CvBanner>
 
           <div className="contact-grid">
             {CONTACT_CHANNELS.map((item) => (

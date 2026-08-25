@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import styled from "@emotion/styled";
 
+import { MdClose } from "react-icons/md";
+
 const Overlay = styled.div({
   position: "fixed",
   inset: 0,
@@ -46,8 +48,16 @@ const CloseButton = styled.button(({ theme }) => ({
   cursor: "pointer",
   fontSize: "1.25rem",
   lineHeight: 1,
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
   color: theme.colors.text,
-  padding: "0.25rem",
+  padding: "0.35rem",
+  borderRadius: "8px",
+  transition: "background-color 0.15s ease, color 0.15s ease",
+  "&:hover": {
+    backgroundColor: "rgba(0, 0, 0, 0.06)",
+  },
 }));
 
 export interface ModalProps {
@@ -59,13 +69,15 @@ export interface ModalProps {
 
 const Modal = ({ open, onClose, title, children }: ModalProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     if (!open) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        onClose();
+        onCloseRef.current();
         return;
       }
       if (event.key !== "Tab" || !panelRef.current) return;
@@ -86,15 +98,20 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
 
     document.addEventListener("keydown", handleKeyDown);
     document.body.style.overflow = "hidden";
-    const firstField =
-      panelRef.current?.querySelector<HTMLElement>("input, button");
-    firstField?.focus();
+
+    // Focus first input field if present, otherwise first focusable element
+    const initialFocusElement =
+      panelRef.current?.querySelector<HTMLElement>("input, textarea, select") ??
+      panelRef.current?.querySelector<HTMLElement>(
+        'button, [href], [tabindex]:not([tabindex="-1"])'
+      );
+    initialFocusElement?.focus();
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 
@@ -111,7 +128,7 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
         <TitleRow>
           <Title>{title}</Title>
           <CloseButton onClick={onClose} aria-label="Close">
-            ×
+            <MdClose size={20} />
           </CloseButton>
         </TitleRow>
         {children}

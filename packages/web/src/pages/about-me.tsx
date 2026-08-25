@@ -7,10 +7,12 @@ import { keyframes } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
 import profileAvatar from "@/images/profile-avatar.jpeg";
 import Button from "@/components/Button";
+import DownloadCvButton from "@/components/DownloadCvButton";
 import { SiTypescript, SiGo, SiPostgresql, SiFlutter } from "react-icons/si";
 import { FaReact } from "react-icons/fa";
 import { LuCloud } from "react-icons/lu";
 import { TbApi, TbInfinity } from "react-icons/tb";
+import { MdOutlineDescription } from "react-icons/md";
 
 const fadeInUp = keyframes`
   from {
@@ -22,6 +24,54 @@ const fadeInUp = keyframes`
     transform: translateY(0);
   }
 `;
+
+const CvBanner = emotionStyled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: "1.25rem",
+  backgroundColor: "#f2f0ee",
+  padding: "1.25rem 1.75rem",
+  borderRadius: "16px",
+  border: "1px solid rgba(0, 0, 0, 0.08)",
+  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
+  marginTop: "1rem",
+  marginBottom: "2.5rem",
+  flexWrap: "wrap",
+  [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
+    flexDirection: "column",
+    alignItems: "stretch",
+    padding: "1.25rem",
+  },
+  "& .banner-left": {
+    display: "flex",
+    alignItems: "center",
+    gap: "1rem",
+  },
+  "& .banner-icon": {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "48px",
+    height: "48px",
+    borderRadius: "12px",
+    backgroundColor: "#ffffff",
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
+    color: theme.colors.button.blue,
+    flexShrink: 0,
+  },
+  "& .banner-title": {
+    fontSize: "15px",
+    fontWeight: 700,
+    color: "#111111",
+    margin: 0,
+  },
+  "& .banner-subtitle": {
+    fontSize: "13px",
+    color: "#666666",
+    margin: "0.2rem 0 0 0",
+  },
+}));
 
 const TECH_EXPERTISE = [
   {
@@ -249,6 +299,21 @@ const AboutMePage = () => {
               <Button color="red" onClick={() => navigate("/projects")}>Explore Side Projects</Button>
             </div>
           </div>
+
+          <CvBanner>
+            <div className="banner-left">
+              <div className="banner-icon">
+                <MdOutlineDescription size={26} />
+              </div>
+              <div>
+                <h4 className="banner-title">Download CV / Resume</h4>
+                <p className="banner-subtitle">
+                  Looking for a detailed summary of my experience?
+                </p>
+              </div>
+            </div>
+            <DownloadCvButton color="blue" variant="filled" />
+          </CvBanner>
 
           <Typography variant="title" className="subsection-title">Technical Expertise:</Typography>
           <div className="tech-badge-grid">

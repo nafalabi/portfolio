@@ -46,6 +46,56 @@ jobs:
               - 'packages/web/**'
               - '.github/workflows/deploy-page.yml'
 
+  test-and-deploy-worker:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.worker_changed == 'true' || inputs.force_worker_deploy == 'true' }}
+    runs-on: ubuntu-latest
+    outputs:
+      worker_url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: yarn
+      - name: Install Dependencies
+        run: |
+          npm i -g yarn
+          yarn install --frozen-lockfile --ignore-engines
+      - name: Lint worker
+        run: yarn workspace worker lint
+      - name: Test worker
+        run: yarn workspace worker test
+      - name: Patch wrangler.jsonc from secrets
+        env:
+          WORKER_KV_NAMESPACE_ID: ${{ secrets.WORKER_KV_NAMESPACE_ID }}
+          MAILGUN_DOMAIN: ${{ secrets.MAILGUN_DOMAIN }}
+          MAILGUN_FROM_EMAIL: ${{ secrets.MAILGUN_FROM_EMAIL }}
+          CV_DRIVE_URL: ${{ secrets.CV_DRIVE_URL }}
+          CORS_ALLOWED_ORIGINS: ${{ secrets.CORS_ALLOWED_ORIGINS }}
+          CV_BLOCKED_DOMAINS: ${{ secrets.CV_BLOCKED_DOMAINS }}
+          CV_RATE_LIMIT_MAX: ${{ secrets.CV_RATE_LIMIT_MAX }}
+          CV_RATE_LIMIT_WINDOW_SECONDS: ${{ secrets.CV_RATE_LIMIT_WINDOW_SECONDS }}
+        run: node ./scripts/ci/patch-wrangler.mjs
+      - name: Deploy Worker
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: packages/worker
+          command: deploy
+          secrets: |-
+            MAILGUN_API_KEY
+        env:
+          MAILGUN_API_KEY: ${{ secrets.MAILGUN_API_KEY }}
+      - name: Summarize worker deploy
+        run: |
+          echo "### Worker :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "- Prev tag: \`${{ needs.detect-changes.outputs.prev_tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Worker changed: \`${{ needs.detect-changes.outputs.worker_changed }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Deployed: \`${{ steps.deploy.outputs.deployment-url }}\`" >> $GITHUB_STEP_SUMMARY
+
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:

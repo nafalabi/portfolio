@@ -96,32 +96,37 @@ jobs:
           echo "- Worker changed: \`${{ needs.detect-changes.outputs.worker_changed }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- Deployed: \`${{ steps.deploy.outputs.deployment-url }}\`" >> $GITHUB_STEP_SUMMARY
 
-  build-and-deploy:
+  build-and-deploy-web:
+    needs: [detect-changes, test-and-deploy-worker]
+    if: ${{ always() && !failure() && !cancelled() && (needs.test-and-deploy-worker.result == 'success' || needs.test-and-deploy-worker.result == 'skipped') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "24"
-          cache: "yarn"
-
+          cache: yarn
       - name: Install Dependencies
         run: |
           npm i -g yarn
           yarn install --frozen-lockfile --ignore-engines
-
+      - name: Resolve VITE_WORKER_API_URL
+        run: |
+          URL="${{ secrets.WORKER_API_URL }}"
+          if [ -z "$URL" ]; then URL="${{ needs.test-and-deploy-worker.outputs.worker_url }}"; fi
+          # fallback is last-deployed workers.dev URL; set WORKER_API_URL secret after first deploy to make it stable
+          if [ -z "$URL" ]; then URL="https://portfolio-api.<account>.workers.dev"; fi
+          echo "VITE_WORKER_API_URL=$URL" >> packages/web/.env.production
+          echo "Using VITE_WORKER_API_URL=$URL" >> $GITHUB_STEP_SUMMARY
+          echo "VITE_WORKER_API_URL resolved (masked if from secret)"
       - name: Build with Vite SSG
         run: yarn workspace web build
-
       - name: Optimize Images
         run: yarn workspace web optimize
-
       - name: Setup CNAME
         run: echo "nandaabi.my.id" > ./packages/web/dist/CNAME
-
       - name: Deploy to Target Repository (nafalabi/nafalabi.github.io)
         uses: peaceiris/actions-gh-pages@v4
         with:

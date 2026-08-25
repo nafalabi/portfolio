@@ -49,31 +49,16 @@ The Medium feed is public and CORS origins are configured in
 `packages/worker/wrangler.jsonc` (local overrides in `.dev.vars`). Future secrets belong in
 Cloudflare's secret store only (`wrangler secret put NAME`) — never in the frontend.
 
-## CV download backend (Google Drive)
+## CV via email (Mailgun)
 
-The "Download CV" button on the home and contact pages grants visitors reader
-access to a private Google Drive folder containing your CV. The worker
-validates + rate-limits each request, then shares the folder with the
-visitor's Gmail address via the Drive API (access auto-expires).
+The "Download CV" button emails visitors a shareable Google Drive link. Worker validates + rate-limits per IP, then sends via Mailgun.
 
 One-time setup:
+1. Create/pick a Drive file, set to "Anyone with the link — Viewer", copy its URL.
+2. In Mailgun: verify your domain (`mg.nandaabi.my.id` or `nandaabi.my.id`), copy domain and private API key.
+3. `npx wrangler kv namespace create CV_RATE_LIMIT_KV` — put id in `wrangler.jsonc` (if not already).
+4. `npx wrangler secret put MAILGUN_API_KEY` (paste key).
+5. Set vars in `wrangler.jsonc`: `MAILGUN_DOMAIN`, `MAILGUN_FROM_EMAIL=noreply@nandaabi.my.id`, `CV_DRIVE_URL`.
+6. `yarn deploy:worker`.
 
-1. Create a GCP project, enable the **Google Drive API**, and create a
-   **service account**. Download its JSON key.
-2. Put the CV PDF in a folder in your personal Drive.
-3. Share that folder with the service account email as **Editor** (once).
-4. Copy the folder ID from the folder URL
-   (`https://drive.google.com/drive/folders/<FOLDER_ID>`).
-5. Create the rate-limit store:
-   `npx wrangler kv namespace create CV_RATE_LIMIT_KV` — replace the
-   placeholder id in `packages/worker/wrangler.jsonc` with the returned id.
-6. Set the secret:
-   `npx wrangler secret put GOOGLE_PRIVATE_KEY`
-   (paste the `private_key` value from the JSON key).
-7. Fill in `DRIVE_FOLDER_ID` and `GSA_CLIENT_EMAIL` vars in
-   `packages/worker/wrangler.jsonc`.
-8. Deploy the worker: `yarn deploy:worker`.
-
-Local development: copy `packages/worker/.dev.vars.example` to `.dev.vars`
-and fill in the same values — `.dev.vars` overrides `wrangler.jsonc` vars and
-is gitignored.
+Local: `cp packages/worker/.dev.vars.example packages/worker/.dev.vars` and fill same values; `.dev.vars` is gitignored.

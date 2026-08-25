@@ -99,10 +99,15 @@ const ScrollHintPill = styled.div<{ visible: boolean }>(({ visible }) => ({
   },
 }));
 
+const checkIsScrollable = () => {
+  if (typeof window === "undefined") return false;
+  return document.documentElement.scrollHeight > window.innerHeight + 100;
+};
+
 const Footer = () => {
   const { pathname } = useLocation();
   const [isAtBottom, setIsAtBottom] = useState(false);
-  const [isScrollable, setIsScrollable] = useState(false);
+  const [isScrollable, setIsScrollable] = useState(checkIsScrollable);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   const targetCompact = isScrollable && !isAtBottom;
@@ -114,7 +119,7 @@ const Footer = () => {
     if (!sentinel) return;
 
     const updateScrollable = () => {
-      const scrollable = document.documentElement.scrollHeight > window.innerHeight + 100;
+      const scrollable = checkIsScrollable();
       setIsScrollable(scrollable);
     };
 
@@ -130,10 +135,19 @@ const Footer = () => {
     );
 
     observer.observe(sentinel);
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateScrollable();
+    });
+    if (document.body) {
+      resizeObserver.observe(document.body);
+    }
+
     window.addEventListener("resize", updateScrollable);
 
     return () => {
       observer.disconnect();
+      resizeObserver.disconnect();
       window.removeEventListener("resize", updateScrollable);
     };
   }, [pathname]);

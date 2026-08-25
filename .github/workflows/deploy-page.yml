@@ -29,13 +29,13 @@ jobs:
           yarn install --frozen-lockfile --ignore-engines
 
       - name: Build with Vite SSG
-        run: yarn build
+        run: yarn workspace web build
 
       - name: Optimize Images
-        run: yarn optimize
+        run: yarn workspace web optimize
 
       - name: Setup CNAME
-        run: echo "nandaabi.my.id" > ./dist/CNAME
+        run: echo "nandaabi.my.id" > ./packages/web/dist/CNAME
 
       - name: Deploy to Target Repository (nafalabi/nafalabi.github.io)
         uses: peaceiris/actions-gh-pages@v4
@@ -43,7 +43,7 @@ jobs:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           external_repository: nafalabi/nafalabi.github.io
           publish_branch: main
-          publish_dir: ./dist
+          publish_dir: ./packages/web/dist
           cname: nandaabi.my.id
 
   create-release:

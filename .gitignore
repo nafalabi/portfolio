@@ -11,6 +11,15 @@ node_modules
 dist
 dist-ssr
 *.local
+package-lock.json
+.superpowers
+docs/superpowers
+
+# env & worker artifacts
+.env*
+!.env.example
+**/.dev.vars
+**/.wrangler/
 
 # Editor directories and files
 .vscode/*

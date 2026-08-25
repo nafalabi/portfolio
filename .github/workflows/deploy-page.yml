@@ -5,12 +5,47 @@ on:
     tags:
       - "v*"
   workflow_dispatch:
+    inputs:
+      force_worker_deploy:
+        description: "Force worker deploy even if no changes"
+        type: boolean
+        default: false
 
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      worker_changed: ${{ steps.filter.outputs.worker }}
+      web_changed: ${{ steps.filter.outputs.web }}
+      prev_tag: ${{ steps.prev-tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - id: prev-tag
+        run: |
+          set -e
+          PREV=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          if [ -z "$PREV" ]; then PREV=$(git rev-list --max-parents=0 HEAD); fi
+          echo "tag=$PREV" >> $GITHUB_OUTPUT
+          echo "Previous tag: $PREV"
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          base: ${{ steps.prev-tag.outputs.tag }}
+          filters: |
+            worker:
+              - 'packages/worker/**'
+              - '.github/workflows/deploy-page.yml'
+            web:
+              - 'packages/web/**'
+              - '.github/workflows/deploy-page.yml'
+
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:

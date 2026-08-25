@@ -1,4 +1,6 @@
 import Container from "@/components/Container";
+import Box from "@/components/Box";
+import DownloadCvButton from "@/components/DownloadCvButton";
 import Navbar from "@/components/Navbar";
 import Typography from "@/components/Typography";
 import Footer from "@/components/Footer";
@@ -173,6 +175,10 @@ const ContactPage = () => {
           <p className="lead-intro">
             If you're working on interesting challenges or want to talk about anything, feel free to reach out!
           </p>
+
+          <Box css={{ marginBottom: "2.5rem" }}>
+            <DownloadCvButton color="red" variant="outlined" />
+          </Box>
 
           <div className="contact-grid">
             {CONTACT_CHANNELS.map((item) => (

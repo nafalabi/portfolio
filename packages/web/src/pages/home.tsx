@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Box from "@/components/Box";
 import Button from "@/components/Button";
 import Container from "@/components/Container";
+import DownloadCvButton from "@/components/DownloadCvButton";
 import Navbar from "@/components/Navbar";
 import Typography from "@/components/Typography";
 import Footer from "@/components/Footer";
@@ -233,6 +234,7 @@ const Home = () => {
             <Button color="red" onClick={() => navigate("/contact")}>
               Contact
             </Button>
+            <DownloadCvButton color="blue" variant="outlined" />
             <PlayIndicatorButton
               className={isExpanded ? "is-expanded" : ""}
               onClick={handleIndicatorClick}

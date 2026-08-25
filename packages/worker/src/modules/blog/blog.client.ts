@@ -8,7 +8,16 @@ export class MediumClient {
     private feedUrl: string = BLOG_CONSTANTS.FEED_URL,
     fetcher: typeof fetch = fetch
   ) {
-    this.fetcher = (input, init) => fetcher(input, init);
+    this.fetcher = (input, init) =>
+      fetcher(input, {
+        ...init,
+        headers: {
+          "User-Agent": "Mozilla/5.0 (compatible; portfolio-api/1.0; +https://nandaabi.my.id)",
+          Accept: "application/rss+xml, text/xml, */*",
+          ...((init as any)?.headers ?? {}),
+        },
+        cf: { cacheTtl: 0 } as any,
+      });
   }
 
   async fetchRawFeed(): Promise<string> {
@@ -22,7 +31,24 @@ export class MediumClient {
     }
 
     if (!response.ok) {
-      throw new UpstreamError(`feed responded with status ${response.status}`);
+      const retryAfterHeader = response.headers.get("retry-after");
+      let retryAfterSeconds: number | undefined;
+      if (retryAfterHeader) {
+        const parsed = Number(retryAfterHeader);
+        if (!Number.isNaN(parsed) && parsed >= 0) {
+          retryAfterSeconds = parsed;
+        } else {
+          const date = Date.parse(retryAfterHeader);
+          if (!Number.isNaN(date)) {
+            retryAfterSeconds = Math.max(0, Math.ceil((date - Date.now()) / 1000));
+          }
+        }
+      }
+      throw new UpstreamError(
+        `feed responded with status ${response.status}`,
+        response.status,
+        retryAfterSeconds
+      );
     }
 
     try {

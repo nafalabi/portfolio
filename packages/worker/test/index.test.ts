@@ -2,6 +2,7 @@ import { SELF, fetchMock } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { BLOG_CONSTANTS } from "../src/modules/blog/blog.types";
 import { FEED_XML } from "./fixtures";
+import { __clearCacheState } from "../src/core/cache";
 
 const FEED_ORIGIN = "https://medium.com";
 const FEED_PATH = "/feed/@nandaabifahmi";
@@ -14,10 +15,12 @@ beforeEach(async () => {
   fetchMock.activate();
   fetchMock.disableNetConnect();
   await caches.default.delete(new Request(BLOG_CONSTANTS.CACHE_KEY));
+  __clearCacheState();
 });
 
 afterEach(() => {
   fetchMock.assertNoPendingInterceptors();
+  __clearCacheState();
 });
 
 describe("GET /posts", () => {

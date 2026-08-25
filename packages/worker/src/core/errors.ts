@@ -10,9 +10,13 @@ export class AppError extends Error {
 }
 
 export class UpstreamError extends AppError {
-  constructor(message: string) {
+  public upstreamStatus?: number;
+  public retryAfterSeconds?: number;
+  constructor(message: string, upstreamStatus?: number, retryAfterSeconds?: number) {
     super(message, 502, "upstream_unavailable");
     this.name = "UpstreamError";
+    this.upstreamStatus = upstreamStatus;
+    this.retryAfterSeconds = retryAfterSeconds;
   }
 }
 

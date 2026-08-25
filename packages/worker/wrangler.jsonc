@@ -12,6 +12,6 @@
     "CV_RATE_LIMIT_MAX": "3",
     "CV_RATE_LIMIT_WINDOW_SECONDS": "86400"
   },
-  "kv_namespaces": [{ "binding": "CV_RATE_LIMIT_KV", "id": "deadbeefdeadbeefdeadbeefdeadbeef" }],
+  "kv_namespaces": [{ "binding": "CV_RATE_LIMIT_KV", "id": "1c0ed980aa364f86b120256bb55f35ac" }],
   "observability": { "enabled": true }
 }

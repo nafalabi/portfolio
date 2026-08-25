@@ -22,9 +22,8 @@ export async function getPosts(): Promise<BlogPost[]> {
   return data.posts;
 }
 
-export interface CvAccessResponse {
-  folderUrl: string;
-  expiresAt: string;
+export interface CvSendResponse {
+  success: true;
 }
 
 export class ApiError extends Error {
@@ -34,22 +33,21 @@ export class ApiError extends Error {
   }
 }
 
-export async function requestCvAccess(email: string): Promise<CvAccessResponse> {
+export async function requestCvSend(email: string): Promise<CvSendResponse> {
   if (!API_URL) {
     throw new ApiError("config");
   }
-  const response = await fetch(`${API_URL.replace(/\/$/, "")}/cv/access`, {
+  const response = await fetch(`${API_URL.replace(/\/$/, "")}/cv/send`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),
   });
   const data = (await response.json().catch(() => ({}))) as {
     error?: string;
-    folderUrl?: string;
-    expiresAt?: string;
+    success?: boolean;
   };
   if (!response.ok) {
     throw new ApiError(data.error ?? "unknown_error");
   }
-  return { folderUrl: data.folderUrl!, expiresAt: data.expiresAt! };
+  return { success: true };
 }

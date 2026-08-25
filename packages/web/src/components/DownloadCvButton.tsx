@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import Button, { ButtonColors, ButtonVariants } from "@/components/Button";
 import Modal from "@/components/Modal";
 import Typography from "@/components/Typography";
-import { requestCvAccess, ApiError } from "@/services/api";
+import { requestCvSend, ApiError } from "@/services/api";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -44,21 +44,11 @@ const Notice = styled.div<{ kind: "error" | "info" }>(({ kind }) => ({
   color: kind === "error" ? "#991b1b" : "#150c6c",
 }));
 
-const SuccessLink = styled.a(({ theme }) => ({
-  display: "inline-flex",
-  alignItems: "center",
-  gap: "0.5rem",
-  fontWeight: 600,
-  color: theme.colors.button.blue,
-}));
-
 const ERROR_MESSAGES: Record<string, string> = {
   invalid_email: "That email doesn't look right. Please check and try again.",
-  domain_not_allowed:
-    "Only Gmail addresses are supported, since access is granted via Google Drive.",
+  disposable_not_allowed: "Disposable/temporary emails aren't allowed. Please use your regular address.",
   rate_limited: "Too many requests from your network. Please try again later.",
-  upstream_unavailable:
-    "Couldn't reach Google Drive. Please try again shortly.",
+  upstream_unavailable: "Couldn't send the email right now. Please try again shortly.",
   internal_error: "Something went wrong. Please try again later.",
   config: "CV service is not configured yet.",
   unknown_error: "Something went wrong. Please try again later.",
@@ -79,16 +69,13 @@ const DownloadCvButton = ({
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [result, setResult] = useState<{
-    folderUrl: string;
-    expiresAt: string;
-  } | null>(null);
+  const [sentTo, setSentTo] = useState<string | null>(null);
 
   const closeModal = () => {
     setOpen(false);
     setStatus("idle");
     setEmail("");
-    setResult(null);
+    setSentTo(null);
     setErrorMessage("");
   };
 
@@ -102,8 +89,8 @@ const DownloadCvButton = ({
     setStatus("submitting");
     setErrorMessage("");
     try {
-      const data = await requestCvAccess(email.trim());
-      setResult(data);
+      await requestCvSend(email.trim());
+      setSentTo(email.trim());
       setStatus("success");
     } catch (error) {
       const code = error instanceof ApiError ? error.code : "unknown_error";
@@ -111,14 +98,6 @@ const DownloadCvButton = ({
       setErrorMessage(ERROR_MESSAGES[code] ?? ERROR_MESSAGES.unknown_error);
     }
   };
-
-  const expiryDate = result
-    ? new Date(result.expiresAt).toLocaleDateString(undefined, {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
-    : "";
 
   return (
     <>
@@ -129,37 +108,21 @@ const DownloadCvButton = ({
         </span>
       </Button>
 
-      <Modal open={open} onClose={closeModal} title="Get access to my CV">
-        {status === "success" && result ? (
-          <>
-            <Notice kind="info">
-              Access granted! Open the folder and grab the PDF. Your access
-              expires on {expiryDate}.
-            </Notice>
-            <SubmitRow>
-              <SuccessLink
-                href={result.folderUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <MdOutlineDownload size={18} />
-                Open CV folder
-              </SuccessLink>
-            </SubmitRow>
-          </>
+      <Modal open={open} onClose={closeModal} title="Get my CV">
+        {status === "success" && sentTo ? (
+          <Notice kind="info">
+            CV sent to {sentTo} — please check your inbox (and spam) shortly.
+          </Notice>
         ) : (
           <form onSubmit={handleSubmit}>
-            <Typography
-              css={{ fontSize: "14px", color: "#555555", marginBottom: "1rem" }}
-            >
-              Enter your Gmail address and I'll share my CV folder with you via
-              Google Drive.
+            <Typography css={{ fontSize: "14px", color: "#555555", marginBottom: "1rem" }}>
+              Enter your email and I&apos;ll send you a link to my CV.
             </Typography>
-            <FieldLabel htmlFor="cv-email">Gmail address</FieldLabel>
+            <FieldLabel htmlFor="cv-email">Email address</FieldLabel>
             <EmailInput
               id="cv-email"
               type="email"
-              placeholder="you@gmail.com"
+              placeholder="you@example.com"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               disabled={status === "submitting"}
@@ -171,12 +134,8 @@ const DownloadCvButton = ({
               </div>
             )}
             <SubmitRow>
-              <Button
-                type="submit"
-                color="blue"
-                disabled={status === "submitting"}
-              >
-                {status === "submitting" ? "Requesting…" : "Request access"}
+              <Button type="submit" color="blue" disabled={status === "submitting"}>
+                {status === "submitting" ? "Sending…" : "Send CV"}
               </Button>
             </SubmitRow>
           </form>

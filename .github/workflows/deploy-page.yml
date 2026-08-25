@@ -5,38 +5,128 @@ on:
     tags:
       - "v*"
   workflow_dispatch:
+    inputs:
+      force_worker_deploy:
+        description: "Force worker deploy even if no changes"
+        type: boolean
+        default: false
 
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  detect-changes:
     runs-on: ubuntu-latest
+    outputs:
+      worker_changed: ${{ steps.filter.outputs.worker }}
+      web_changed: ${{ steps.filter.outputs.web }}
+      prev_tag: ${{ steps.prev-tag.outputs.tag }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - id: prev-tag
+        run: |
+          set -e
+          PREV=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          if [ -z "$PREV" ]; then PREV=$(git rev-list --max-parents=0 HEAD); fi
+          echo "tag=$PREV" >> $GITHUB_OUTPUT
+          echo "Previous tag: $PREV"
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          base: ${{ steps.prev-tag.outputs.tag }}
+          filters: |
+            worker:
+              - 'packages/worker/**'
+              - '.github/workflows/deploy-page.yml'
+            web:
+              - 'packages/web/**'
+              - '.github/workflows/deploy-page.yml'
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+  test-and-deploy-worker:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.worker_changed == 'true' || inputs.force_worker_deploy == 'true' }}
+    runs-on: ubuntu-latest
+    outputs:
+      worker_url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: "24"
-          cache: "yarn"
-
+          cache: yarn
       - name: Install Dependencies
         run: |
           npm i -g yarn
           yarn install --frozen-lockfile --ignore-engines
+      - name: Lint worker
+        run: yarn workspace worker lint
+      - name: Test worker
+        run: yarn workspace worker test
+      - name: Patch wrangler.jsonc from secrets
+        env:
+          WORKER_KV_NAMESPACE_ID: ${{ secrets.WORKER_KV_NAMESPACE_ID }}
+          MAILGUN_DOMAIN: ${{ secrets.MAILGUN_DOMAIN }}
+          MAILGUN_FROM_EMAIL: ${{ secrets.MAILGUN_FROM_EMAIL }}
+          CV_DRIVE_URL: ${{ secrets.CV_DRIVE_URL }}
+          CORS_ALLOWED_ORIGINS: ${{ secrets.CORS_ALLOWED_ORIGINS }}
+          CV_BLOCKED_DOMAINS: ${{ secrets.CV_BLOCKED_DOMAINS }}
+          CV_RATE_LIMIT_MAX: ${{ secrets.CV_RATE_LIMIT_MAX }}
+          CV_RATE_LIMIT_WINDOW_SECONDS: ${{ secrets.CV_RATE_LIMIT_WINDOW_SECONDS }}
+        run: node ./scripts/ci/patch-wrangler.mjs
+      - name: Deploy Worker
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: packages/worker
+          command: deploy
+          secrets: |-
+            MAILGUN_API_KEY
+        env:
+          MAILGUN_API_KEY: ${{ secrets.MAILGUN_API_KEY }}
+      - name: Summarize worker deploy
+        run: |
+          echo "### Worker :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "- Prev tag: \`${{ needs.detect-changes.outputs.prev_tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Worker changed: \`${{ needs.detect-changes.outputs.worker_changed }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Deployed: \`${{ steps.deploy.outputs.deployment-url }}\`" >> $GITHUB_STEP_SUMMARY
 
+  build-and-deploy-web:
+    needs: [detect-changes, test-and-deploy-worker]
+    if: ${{ always() && !failure() && !cancelled() && (needs.test-and-deploy-worker.result == 'success' || needs.test-and-deploy-worker.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: yarn
+      - name: Install Dependencies
+        run: |
+          npm i -g yarn
+          yarn install --frozen-lockfile --ignore-engines
+      - name: Resolve VITE_WORKER_API_URL
+        run: |
+          URL="${{ secrets.WORKER_API_URL }}"
+          if [ -z "$URL" ]; then URL="${{ needs.test-and-deploy-worker.outputs.worker_url }}"; fi
+          # fallback is last-deployed workers.dev URL; set WORKER_API_URL secret after first deploy to make it stable
+          if [ -z "$URL" ]; then URL="https://portfolio-api.<account>.workers.dev"; fi
+          echo "VITE_WORKER_API_URL=$URL" >> packages/web/.env.production
+          echo "Using VITE_WORKER_API_URL=$URL" >> $GITHUB_STEP_SUMMARY
+          echo "VITE_WORKER_API_URL resolved (masked if from secret)"
       - name: Build with Vite SSG
         run: yarn workspace web build
-
       - name: Optimize Images
         run: yarn workspace web optimize
-
       - name: Setup CNAME
         run: echo "nandaabi.my.id" > ./packages/web/dist/CNAME
-
       - name: Deploy to Target Repository (nafalabi/nafalabi.github.io)
         uses: peaceiris/actions-gh-pages@v4
         with:
@@ -47,15 +137,14 @@ jobs:
           cname: nandaabi.my.id
 
   create-release:
-    needs: build-and-deploy
-    if: startsWith(github.ref, 'refs/tags/')
+    needs: [test-and-deploy-worker, build-and-deploy-web]
+    if: ${{ startsWith(github.ref, 'refs/tags/') && needs.build-and-deploy-web.result == 'success' && (needs.test-and-deploy-worker.result == 'success' || needs.test-and-deploy-worker.result == 'skipped') }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
       - name: Create GitHub Release in Portfolio
         uses: softprops/action-gh-release@v2
         with:

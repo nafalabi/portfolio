@@ -2,3 +2,15 @@
 # Copy this file to .dev.vars (which is gitignored) for local development with `wrangler dev`.
 
 CORS_ALLOWED_ORIGINS=https://nandaabi.my.id,http://localhost:8000,http://127.0.0.1:8000,http://192.168.1.99:8000,http://localhost:5173,http://127.0.0.1:5173
+
+# --- CV via Mailgun ---
+# Secret: Mailgun private API key (never commit)
+MAILGUN_API_KEY=
+
+# Vars:
+MAILGUN_DOMAIN=mg.nandaabi.my.id
+MAILGUN_FROM_EMAIL=noreply@nandaabi.my.id
+CV_DRIVE_URL=https://drive.google.com/file/d/REPLACE_WITH_ID/view?usp=sharing
+CV_BLOCKED_DOMAINS=
+CV_RATE_LIMIT_MAX=3
+CV_RATE_LIMIT_WINDOW_SECONDS=86400

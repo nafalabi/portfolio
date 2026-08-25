@@ -10,6 +10,8 @@
     "lint:worker": "yarn workspace worker lint",
     "dev:worker": "yarn workspace worker dev",
     "test:worker": "yarn workspace worker test",
-    "deploy:worker": "yarn workspace worker deploy"
+    "deploy:worker": "yarn workspace worker deploy",
+    "tag": "./scripts/create-tag.sh",
+    "release-tag": "./scripts/create-tag.sh --push"
   }
 }

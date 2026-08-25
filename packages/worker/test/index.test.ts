@@ -1,4 +1,4 @@
-import { SELF, fetchMock } from "cloudflare:test";
+import { SELF, fetchMock, env } from "cloudflare:test";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { BLOG_CONSTANTS } from "../src/modules/blog/blog.types";
 import { FEED_XML } from "./fixtures";
@@ -15,12 +15,14 @@ beforeEach(async () => {
   fetchMock.activate();
   fetchMock.disableNetConnect();
   await caches.default.delete(new Request(BLOG_CONSTANTS.CACHE_KEY));
+  await env.CV_RATE_LIMIT_KV.delete(BLOG_CONSTANTS.KV_KEY);
   __clearCacheState();
 });
 
-afterEach(() => {
+afterEach(async () => {
   fetchMock.assertNoPendingInterceptors();
   __clearCacheState();
+  await env.CV_RATE_LIMIT_KV.delete(BLOG_CONSTANTS.KV_KEY);
 });
 
 describe("GET /posts", () => {
@@ -155,5 +157,41 @@ describe("GET /posts (cache)", () => {
     expect(res.status).toBe(200);
     const body = (await res.json()) as { posts: Array<{ title: string }> };
     expect(body.posts[0].title).toBe("stale survivor");
+  });
+
+  it("writes posts to KV on successful fetch for cold-start fallback", async () => {
+    mockFeed(200, FEED_XML);
+    const res = await SELF.fetch("https://example.com/posts");
+    expect(res.status).toBe(200);
+    const kv = await env.CV_RATE_LIMIT_KV.get(BLOG_CONSTANTS.KV_KEY, "json") as any;
+    expect(kv).toBeDefined();
+    expect(kv.posts[0].title).toBe("TypeScript Tips From Real Projects");
+  });
+
+  it("serves KV fallback on cold miss when upstream is 429", async () => {
+    // seed KV with previous successful fetch
+    await env.CV_RATE_LIMIT_KV.put(
+      BLOG_CONSTANTS.KV_KEY,
+      JSON.stringify({ posts: [{ title: "kv fallback post" }] })
+    );
+    // ensure edge cache is empty
+    await caches.default.delete(new Request(BLOG_CONSTANTS.CACHE_KEY));
+    mockFeed(429, "rate limited");
+
+    const res = await SELF.fetch("https://example.com/posts");
+    expect(res.status).toBe(200);
+    expect(res.headers.get("x-cache")).toBe("kv-fallback");
+    const body = (await res.json()) as { posts: Array<{ title: string }> };
+    expect(body.posts[0].title).toBe("kv fallback post");
+  });
+
+  it("still returns 502 on cold miss with 429 when KV is empty", async () => {
+    await env.CV_RATE_LIMIT_KV.delete(BLOG_CONSTANTS.KV_KEY);
+    await caches.default.delete(new Request(BLOG_CONSTANTS.CACHE_KEY));
+    mockFeed(429, "rate limited");
+
+    const res = await SELF.fetch("https://example.com/posts");
+    expect(res.status).toBe(502);
+    expect(await res.json()).toEqual({ error: "upstream_unavailable" });
   });
 });

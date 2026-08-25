@@ -3,6 +3,7 @@ import { cors } from "hono/cors";
 import { AppContext, Env } from "./core/env";
 import { AppError } from "./core/errors";
 import { blogController } from "./modules/blog/blog.controller";
+import { cvController } from "./modules/cv/cv.controller";
 import { healthController } from "./modules/health/health.controller";
 
 export type { Env };
@@ -20,7 +21,7 @@ app.use("*", async (c, next) => {
     origin: (origin) => {
       return allowedOrigins.includes(origin) ? origin : null;
     },
-    allowMethods: ["GET", "OPTIONS"],
+    allowMethods: ["GET", "POST", "OPTIONS"],
   });
 
   return corsHandler(c, next);
@@ -28,6 +29,7 @@ app.use("*", async (c, next) => {
 
 // Feature Routes
 app.route("/posts", blogController);
+app.route("/cv", cvController);
 app.route("/health", healthController);
 
 // Not Found Handler

@@ -28,14 +28,19 @@ const Button = styled.button<ButtonProps>(({ theme, color, variant = "filled" })
 
   return {
     appearance: "none",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
     border: isOutlined ? `2px solid ${backgroundColor}` : "none",
     backgroundColor: isOutlined ? "transparent" : backgroundColor,
     color: isOutlined ? backgroundColor : textColor,
-    padding: "0.5rem 1.5rem",
+    padding: "0.55rem 1.5rem",
     borderRadius: "2rem",
     cursor: "pointer",
     boxShadow: isOutlined ? "none" : theme.shadow[2],
     fontSize: "15px",
+    fontWeight: 500,
+    lineHeight: 1.2,
     transition: "all 0.2s ease-in",
 
     "&:hover": {

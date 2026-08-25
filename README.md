@@ -45,6 +45,20 @@ yarn deploy:worker  # or yarn workspace worker deploy — requires `npx wrangler
 Or `cd packages/worker && yarn test/dev/deploy` directly. Root shortcuts (`test:worker`, `dev:worker`, `deploy:worker`) are defined in the workspace root `package.json`.
 
 For local end-to-end development set `VITE_WORKER_API_URL=http://localhost:8787`.
-No secrets are required today: the Medium feed is public and CORS origins are
-configured in `packages/worker/wrangler.jsonc`. Future secrets belong in Cloudflare's
-secret store only (`wrangler secret put NAME`) — never in the frontend.
+The Medium feed is public and CORS origins are configured in
+`packages/worker/wrangler.jsonc` (local overrides in `.dev.vars`). Future secrets belong in
+Cloudflare's secret store only (`wrangler secret put NAME`) — never in the frontend.
+
+## CV via email (Mailgun)
+
+The "Download CV" button emails visitors a shareable Google Drive link. Worker validates + rate-limits per IP, then sends via Mailgun.
+
+One-time setup:
+1. Create/pick a Drive file, set to "Anyone with the link — Viewer", copy its URL.
+2. In Mailgun: verify your domain (`mg.nandaabi.my.id` or `nandaabi.my.id`), copy domain and private API key.
+3. `npx wrangler kv namespace create CV_RATE_LIMIT_KV` — put id in `wrangler.jsonc` (if not already).
+4. `npx wrangler secret put MAILGUN_API_KEY` (paste key).
+5. Set vars in `wrangler.jsonc`: `MAILGUN_DOMAIN`, `MAILGUN_FROM_EMAIL=noreply@nandaabi.my.id`, `CV_DRIVE_URL`.
+6. `yarn deploy:worker`.
+
+Local: `cp packages/worker/.dev.vars.example packages/worker/.dev.vars` and fill same values; `.dev.vars` is gitignored.

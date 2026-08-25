@@ -21,3 +21,33 @@ export async function getPosts(): Promise<BlogPost[]> {
   const data = (await response.json()) as { posts: BlogPost[] };
   return data.posts;
 }
+
+export interface CvSendResponse {
+  success: true;
+}
+
+export class ApiError extends Error {
+  constructor(public code: string) {
+    super(code);
+    this.name = "ApiError";
+  }
+}
+
+export async function requestCvSend(email: string): Promise<CvSendResponse> {
+  if (!API_URL) {
+    throw new ApiError("config");
+  }
+  const response = await fetch(`${API_URL.replace(/\/$/, "")}/cv/send`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+  const data = (await response.json().catch(() => ({}))) as {
+    error?: string;
+    success?: boolean;
+  };
+  if (!response.ok) {
+    throw new ApiError(data.error ?? "unknown_error");
+  }
+  return { success: true };
+}

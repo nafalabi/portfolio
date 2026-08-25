@@ -15,3 +15,17 @@ export class UpstreamError extends AppError {
     this.name = "UpstreamError";
   }
 }
+
+export class ValidationError extends AppError {
+  constructor(message: string, code: "invalid_email" | "domain_not_allowed" | "disposable_not_allowed") {
+    super(message, 400, code);
+    this.name = "ValidationError";
+  }
+}
+
+export class RateLimitError extends AppError {
+  constructor(message: string) {
+    super(message, 429, "rate_limited");
+    this.name = "RateLimitError";
+  }
+}

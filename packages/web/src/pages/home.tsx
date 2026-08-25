@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Box from "@/components/Box";
 import Button from "@/components/Button";
 import Container from "@/components/Container";
@@ -134,6 +134,22 @@ const PlayIndicatorButton = styled("button")(({ theme }) => ({
   },
 }));
 
+const HeroActionsRow = styled(Box)({
+  display: "flex",
+  flexWrap: "wrap",
+  marginTop: "2rem",
+  gap: "0.85rem",
+  alignItems: "center",
+  "@media (max-width: 480px)": {
+    marginTop: "1.5rem",
+    gap: "0.65rem",
+    "& button": {
+      fontSize: "14px",
+      padding: "0.45rem 1.15rem",
+    },
+  },
+});
+
 const RootMain = styled("main")<{ isExiting?: boolean }>(({ theme, isExiting }) => ({
   display: "flex",
   flexDirection: "column",
@@ -226,11 +242,11 @@ const Home = () => {
           </Typography>
         </div>
         <div className="hero-item-4">
-          <Box css={{ display: "flex", marginTop: "2rem", gap: "1rem", alignItems: "center" }}>
-            <Button color="blue" onClick={() => navigate("/about-me")}>
+          <HeroActionsRow>
+            <Button color="blue" onClick={() => handleNavigateWithDispose("/about-me")}>
               About me
             </Button>
-            <Button color="red" onClick={() => navigate("/contact")}>
+            <Button color="red" onClick={() => handleNavigateWithDispose("/contact")}>
               Contact
             </Button>
             <PlayIndicatorButton
@@ -243,9 +259,9 @@ const Home = () => {
               <span className="dot-container">
                 <span className="dot" />
               </span>
-              <span className="label">Let's play 🐍</span>
+              <span className="label">Let&apos;s play 🐍</span>
             </PlayIndicatorButton>
-          </Box>
+          </HeroActionsRow>
         </div>
       </Container>
       <div className="footer-wrapper">

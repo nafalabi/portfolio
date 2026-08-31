@@ -142,6 +142,44 @@ const projects = [
     ],
   },
   {
+    title: "Patungan App",
+    images: [
+      PatunganLogin,
+      PatunganDashboard,
+      PatunganPlans,
+      PatunganDuesPlanFixed,
+      PatunganDuePayment,
+      PatunganUsers,
+      PatunganSettings,
+    ],
+    company: "Personal project",
+    description:
+      "Patungan App is a web application designed to manage shared expenses, recurring plans, and payment dues. Built with Go (Echo) and Templ, it features secure Firebase authentication, automated recurring billing plan schedules.",
+    techs: [
+      "Go",
+      "Echo",
+      "Templ",
+      "HTMX",
+      "TailwindCSS",
+      "PostgreSQL",
+      "Redis",
+      "Midtrans",
+      "Mayar.id",
+      "Firebase",
+    ],
+    links: [
+      {
+        link: "https://github.com/nafalabi/patungan_app",
+        text: (
+          <>
+            <FaGithub css={{ marginBottom: "-2px" }} />
+            &nbsp; Source
+          </>
+        ),
+      },
+    ],
+  },
+  {
     images: [
       TofIntro,
       TofRegister,
@@ -244,44 +282,6 @@ const projects = [
           </>
         ),
         link: "https://intara-iot.vercel.app",
-      },
-    ],
-  },
-  {
-    title: "Patungan App",
-    images: [
-      PatunganDashboard,
-      PatunganPlans,
-      PatunganLogin,
-      PatunganDuesPlanFixed,
-      PatunganDuePayment,
-      PatunganUsers,
-      PatunganSettings,
-    ],
-    company: "Personal project",
-    description:
-      "Patungan App is a web application designed to manage shared expenses, recurring plans, and payment dues. Built with Go (Echo) and Templ, it features secure Firebase authentication, automated recurring billing plan schedules.",
-    techs: [
-      "Go",
-      "Echo",
-      "Templ",
-      "HTMX",
-      "TailwindCSS",
-      "PostgreSQL",
-      "Redis",
-      "Midtrans",
-      "Mayar.id",
-      "Firebase",
-    ],
-    links: [
-      {
-        link: "https://github.com/nafalabi/patungan_app",
-        text: (
-          <>
-            <FaGithub css={{ marginBottom: "-2px" }} />
-            &nbsp; Source
-          </>
-        ),
       },
     ],
   },
